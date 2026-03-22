@@ -1,17 +1,18 @@
-# Claude
+# Project Overview
 
-# Note-Taking App — Project Context
-## What this project is
-A note-taking app with categories, auto-save, and voice-to-text. Backend: Django + DRF. Frontend: Next.js 16 + TypeScript + shadcn/ui.
+Note-taking app with categories, auto-save, and voice-to-text.
+Backend: Django + DRF (scaffolded). Frontend: Next.js 16 + shadcn/ui (to be built).
+
 ## Before any task
-1. Read @docs/product-specs.md — product specs and business logic
-2. Read @docs/ubiquitous-language.md — domain terminology (if it exists)
-3. Read the relevant tasks file in @docs/features/ for the current feature
-## Architecture
-Monolito modular con Django REST Framework, organizado por apps de dominio (`notes`, `users`) con API REST stateless y autenticación JWT.
 
-## Stack
-### Backend (already scaffolded)
+1. Read `docs/product-specs.md` — product specs and business logic
+2. Read `docs/ubiquitous-language.md` — domain terminology (if it exists)
+3. Read the relevant tasks file in `docs/features/` for the current feature
+
+# Tech Stack
+
+## Backend (already scaffolded)
+
 - Framework: Django 6.0 + Django REST Framework
 - Auth: JWT via djangorestframework-simplejwt
 - Database: SQLite (dev)
@@ -19,65 +20,105 @@ Monolito modular con Django REST Framework, organizado por apps de dominio (`not
 - Apps: apps.users, apps.notes
 - Linting: ruff
 - Testing: pytest + Django Test Client
-### Frontend (to be built)
-- Runs on localhost:3000
-- Framework: Next.js 16.x + React + TypeScript
-- UI Library: shadcn/ui
-- Styling: Tailwind CSS
-## Project structure
-- backend/apps/users/ — user model and auth
-- backend/apps/notes/ — notes and categories
-- docs/specs.md — source of truth for requirements
-- docs/ubiquitous-language.md — domain glossary
-- docs/features/ — PRDs and tasks per feature
-## Workflow
+
+## Frontend (to be built)
+
+- Runtime: Node.js 24 LTS (see `frontend/.nvmrc`) · pnpm · localhost:3000
+- Framework: Next.js 16.x (App Router) + React + TypeScript strict
+- UI Library: shadcn/ui (New York style)
+- Styling: Tailwind CSS v4 (CSS-based config in `globals.css`)
+- Server state: TanStack Query
+- Icons: lucide-react
+- Dates: date-fns
+- Linting: ESLint + Prettier (with prettier-plugin-tailwindcss)
+- Testing: Playwright (E2E) · Vitest (optional unit)
+
+# Commands
+
+## Backend
+
+```
+cd backend
+python manage.py runserver          # localhost:8000
+python manage.py test               # run tests
+ruff check .                        # lint
+ruff check . --fix                  # lint + autofix
+```
+
+## Frontend
+
+```
+cd frontend
+pnpm dev                            # localhost:3000
+pnpm build                          # production build (catches TS errors)
+pnpm lint                           # ESLint
+pnpm format                         # Prettier write
+pnpm format:check                   # Prettier check (CI)
+```
+
+# Architecture Decisions
+
+- Monolito modular con Django REST Framework, organizado por apps de dominio (`notes`, `users`) con API REST stateless y autenticación JWT
+- API calls go through `frontend/src/lib/api-client.ts` — never `fetch()` directly in components
+- Mock data lives in api-client during scaffold phase; swapped to real fetch in integration PRDs 7-9
+- Custom colors (categories, auth bg) defined via `@theme` in `globals.css`
+- Use shadcn tokens for UI chrome, custom tokens for business colors
+- Route params and searchParams are async in Next.js 16 (must be awaited)
+- Route groups: `(auth)` for login/signup, `(dashboard)` for main app — separate layouts, no URL impact
+- Turbopack is the default bundler in Next.js 16
+- React Compiler is NOT enabled (opt-in, increases compile time)
+
+# Project Structure
+
+- `backend/apps/users/` — user model and auth
+- `backend/apps/notes/` — notes and categories
+- `frontend/src/features/{auth,notes,categories}/` — feature modules with `components/`, `hooks/`, `types.ts`
+- `frontend/src/components/ui/` — shadcn components
+- `frontend/src/lib/` — api-client, utils, mock-data
+- `docs/product-specs.md` — source of truth for requirements
+- `docs/ubiquitous-language.md` — domain glossary
+- `docs/features/` — PRDs and tasks per feature
+
+# Data Model
+
+See source of truth: `backend/apps/users/models.py`, `backend/apps/notes/models.py`
+
+# API Endpoints
+
+See source of truth: `backend/config/urls.py`, `backend/apps/users/views.py`, `backend/apps/notes/views.py`
+
+# Workflow
+
 - Backend: follow TDD — write the test first, then the implementation
-- Run ruff after every backend change
+- Frontend: build with mock data first (PRDs 1-6), integrate real API later (PRDs 7-9)
+- Run linter after every change (`ruff` for backend, `pnpm lint` for frontend)
 - Mark tasks as complete in the tasks.md file after each implementation
 - Never skip a failing test — fix it before moving on
-## Testing rules
-### Backend (pytest + Django Test Client) — TDD
+
+# Testing Rules
+
+## Backend (pytest + Django Test Client) — TDD
+
 - Every endpoint needs at least one test
 - Test ownership: a user should never access another user's data
 - Test the unhappy path: wrong credentials, missing fields, invalid data
-### Frontend (Playwright) — E2E
+
+## Frontend (Playwright) — E2E
+
 - End-to-end tests that validate full user flows against acceptance criteria
-### Frontend (Vitest) — Selective Unit Tests (Optional)
+
+## Frontend (Vitest) — Selective Unit Tests (Optional)
+
 - Test pure logic only: date formatting, auto-save debounce, category filtering
 - No visual/snapshot tests
-## Data Model
-See source of truth: `backend/apps/users/models.py`, `backend/apps/notes/models.py`
 
-## API Endpoints
-See source of truth: `backend/config/urls.py`, `backend/apps/users/views.py`, `backend/apps/notes/views.py`
+# Conventions
 
-### Auth
-| Method | Endpoint | Description |
-| --- | --- | --- |
-| POST | `/api/auth/signup/` | Register new user |
-| POST | `/api/auth/login/` | Obtain JWT tokens |
-| POST | `/api/auth/refresh/` | Refresh access token |
-
-### Categories
-| Method | Endpoint | Description |
-| --- | --- | --- |
-| GET | `/api/categories/` | List user's categories |
-| POST | `/api/categories/` | Create a new custom category |
-| PATCH | `/api/categories/:id/` | Edit a category's name and color |
-
-### Notes
-| Method | Endpoint | Description |
-| --- | --- | --- |
-| GET | `/api/notes/` | List all user's notes |
-| POST | `/api/notes/` | Create a new note (triggered immediately on "New Note" click) |
-| GET | `/api/notes/:id/` | Get a single note |
-| PATCH | `/api/notes/:id/` | Update a note |
-| DELETE | `/api/notes/:id/` | Delete a note |
-
-> **Query Parameter**: `GET /api/notes/?category=:id` — filter notes by category
-
-## Conventions
 - Use email-based authentication (not username)
 - All API responses in JSON
 - Keep views thin — business logic goes in models or services
-- UUID or Int PKs (follow what's already in the codebase)
+- Follow existing PK style in the codebase (don't mix UUID and Int)
+- Components in `features/*/components/`, colocated with their types
+- Hooks in `features/*/hooks/`, one file per domain (useNotes, useCategories)
+- Never use `bg-white` or `text-black` directly — use shadcn tokens
+- Import with `@/*` alias (resolves to `src/*`)

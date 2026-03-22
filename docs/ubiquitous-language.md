@@ -1,2 +1,0 @@
-# Ubiquitous Language
-
