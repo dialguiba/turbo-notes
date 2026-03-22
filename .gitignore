@@ -1,19 +1,7 @@
-# Python / Django
-__pycache__/
-*.py[cod]
-*.sqlite3
-.env
-*.egg-info/
-dist/
-.venv/
 
-# uv
-.python-version
 
-# Node / Next.js
-node_modules/
-.next/
-out/
+# Claude Code
+.claude/
 
 # IDEs
 .vscode/
