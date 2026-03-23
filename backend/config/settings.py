@@ -22,6 +22,7 @@ INSTALLED_APPS = [
     # third party
     "rest_framework",
     "rest_framework_simplejwt",
+    "drf_spectacular",
     "corsheaders",
     # local
     "apps.users",
@@ -89,6 +90,13 @@ REST_FRAMEWORK = {
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
     "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+}
+
+SPECTACULAR_SETTINGS = {
+    "TITLE": "Turbo Notes API",
+    "DESCRIPTION": "Note-taking app with categories, auto-save, and voice-to-text.",
+    "VERSION": "1.0.0",
 }
 
 CORS_ALLOWED_ORIGINS = config(
