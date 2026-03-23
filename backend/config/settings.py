@@ -1,3 +1,4 @@
+from datetime import timedelta
 from pathlib import Path
 
 from decouple import config
@@ -97,6 +98,11 @@ SPECTACULAR_SETTINGS = {
     "TITLE": "Turbo Notes API",
     "DESCRIPTION": "Note-taking app with categories, auto-save, and voice-to-text.",
     "VERSION": "1.0.0",
+}
+
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=30),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
 }
 
 CORS_ALLOWED_ORIGINS = config(
