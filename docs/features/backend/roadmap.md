@@ -5,11 +5,11 @@
 | # | PRD | Status | Blocked by | Docs |
 | --- | --- | --- | --- | --- |
 | 1 | Custom User Model | ✅ Complete | — | [`user-model/`](user-model/) |
-| 2 | Auth Endpoints (signup, login, refresh) | Not started | PRD 1 ✅ | [`auth-endpoints/`](auth-endpoints/) |
-| 3 | Category Model + Default Categories | Not started | PRD 1 ✅ | TBD |
-| 4 | Category Endpoints (CRUD) | Not started | PRD 3 | TBD |
-| 5 | Note Model | Not started | PRD 3 | TBD |
-| 6 | Note Endpoints (CRUD) | Not started | PRD 5 | TBD |
+| 2 | Auth Endpoints (signup, login, refresh) | ✅ Complete | PRD 1 ✅ | [`auth-endpoints/`](auth-endpoints/) |
+| 3 | Category Model + Default Categories | ✅ Complete | PRD 2 ✅ | [`category-model/`](category-model/) |
+| 4 | Category Endpoints (CRUD) | ✅ Complete | PRD 3 ✅ | [`category-endpoints/`](category-endpoints/) |
+| 5 | Note Model + Category Deletion Safety | ✅ Complete | PRD 3 ✅ | [`note-model/`](note-model/) |
+| 6 | Note Endpoints (CRUD) | ✅ Complete | PRD 5 ✅ | [`note-endpoints/`](note-endpoints/) |
 
 ## Implementation Order
 

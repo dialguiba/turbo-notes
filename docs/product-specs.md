@@ -75,6 +75,11 @@ Three categories are **automatically created** for every new user:
 - Editing is accessible via the category dropdown in the note editor
 - Changes apply immediately to all notes assigned to that category
 
+### 2.6 Deleting Categories
+
+- When a category is deleted, all its notes become **uncategorized** (`category = null`) — the notes are preserved, only the category link is removed
+- All categories (including the 3 defaults) are fully editable and deletable
+
 ---
 
 ## 3. Notes

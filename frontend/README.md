@@ -1,36 +1,90 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Turbo Notes — Frontend
+
+Next.js 16 application for a note-taking app with categories, auto-save, and voice-to-text.
+
+## Tech Stack
+
+- **Runtime:** Node.js 24 LTS (see `.nvmrc`)
+- **Package manager:** pnpm
+- **Framework:** Next.js 16.x (App Router) + React 19 + TypeScript (strict)
+- **Bundler:** Turbopack (Next.js 16 default)
+- **UI Library:** shadcn/ui (New York style)
+- **Styling:** Tailwind CSS v4 (CSS-based config in `globals.css`)
+- **Server state:** TanStack Query
+- **Icons:** lucide-react
+- **Dates:** date-fns
+- **Linting:** ESLint + Prettier (with `prettier-plugin-tailwindcss`)
+
+## Project Structure
+
+```text
+frontend/src/
+├── app/
+│   ├── (auth)/              # Login/signup routes (separate layout)
+│   ├── (dashboard)/         # Main app routes (separate layout)
+│   ├── globals.css          # Tailwind v4 config + custom theme tokens
+│   ├── layout.tsx           # Root layout
+│   ├── providers.tsx        # Client providers (TanStack Query, etc.)
+│   └── page.tsx             # Landing page
+├── components/
+│   ├── ui/                  # shadcn components
+│   └── illustrations/       # SVG illustrations
+├── features/
+│   ├── auth/                # Auth feature module
+│   ├── notes/               # Notes feature module
+│   └── categories/          # Categories feature module
+├── lib/
+│   ├── api-client.ts        # Centralized API client (all fetch calls go here)
+│   ├── mock-data.ts         # Mock data for scaffold phase
+│   └── utils.ts             # Shared utilities (cn, etc.)
+```
+
+Each feature module follows this structure:
+
+```text
+features/<feature>/
+├── components/              # Feature-specific components
+├── hooks/                   # Feature-specific hooks (useNotes, useCategories)
+└── types.ts                 # Feature-specific types
+```
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js 24+ (see `.nvmrc`)
+- pnpm
+
+### Installation
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+cd frontend
+pnpm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Run the Dev Server
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+pnpm dev                     # http://localhost:3000
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Available Commands
 
-## Learn More
+| Command              | Description                        |
+| -------------------- | ---------------------------------- |
+| `pnpm dev`           | Start dev server on port 3000      |
+| `pnpm build`         | Production build (catches TS errors) |
+| `pnpm start`         | Serve production build             |
+| `pnpm lint`          | Run ESLint                         |
+| `pnpm format`        | Format with Prettier               |
+| `pnpm format:check`  | Check formatting (CI)              |
 
-To learn more about Next.js, take a look at the following resources:
+## Key Design Decisions
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **Route groups** — `(auth)` and `(dashboard)` provide separate layouts without affecting URLs
+- **Feature modules** — components, hooks, and types colocated per domain (`auth`, `notes`, `categories`)
+- **Centralized API client** — all API calls go through `lib/api-client.ts`, never raw `fetch()` in components
+- **Mock-first development** — PRDs 1-6 use mock data in `lib/mock-data.ts`; real API integration comes in PRDs 7-9
+- **shadcn tokens for UI** — never use `bg-white` or `text-black` directly; use design tokens for theme support
+- **Custom theme tokens** — category colors and auth background defined via `@theme` in `globals.css`
+- **Import alias** — `@/*` resolves to `src/*`

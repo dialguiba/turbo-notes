@@ -37,13 +37,19 @@ Backend: Django + DRF (scaffolded). Frontend: Next.js 16 + shadcn/ui (to be buil
 
 ## Backend
 
-```
+```bash
 cd backend
 python manage.py runserver          # localhost:8000
 python manage.py test               # run tests
+python manage.py showmigrations     # verify migration status
+python manage.py makemigrations     # generate new migrations
+python manage.py migrate            # apply pending migrations
+python manage.py createsuperuser    # create admin user (first time setup)
 ruff check .                        # lint
 ruff check . --fix                  # lint + autofix
 ```
+
+> **First time setup:** run `python manage.py migrate` then `python manage.py createsuperuser` to access the Django admin at `localhost:8000/admin/`.
 
 ## Frontend
 

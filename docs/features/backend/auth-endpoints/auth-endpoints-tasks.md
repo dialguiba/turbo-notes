@@ -17,20 +17,20 @@ Implement three auth API endpoints: signup, login, and token refresh. This is a 
 
 ## Acceptance criteria
 
-- [ ] `SIMPLE_JWT` config added to settings: `ACCESS_TOKEN_LIFETIME = 30 min`, `REFRESH_TOKEN_LIFETIME = 7 days`
-- [ ] `SignUpSerializer` validates email (required, unique) and password (required, min 8 chars, write_only)
-- [ ] `SignUpSerializer.create()` creates user via `CustomUser.objects.create_user()` and generates JWT tokens
-- [ ] POST `/api/auth/signup/` with valid email + password → 201, returns `{ access, refresh }`
-- [ ] POST `/api/auth/signup/` with duplicate email → 400, field-level error on `email`
-- [ ] POST `/api/auth/signup/` with missing email → 400
-- [ ] POST `/api/auth/signup/` with missing password → 400
-- [ ] POST `/api/auth/login/` with valid credentials → 200, returns `{ access, refresh }`
-- [ ] POST `/api/auth/login/` with wrong password → 401
-- [ ] POST `/api/auth/login/` with non-existent email → 401
-- [ ] POST `/api/auth/refresh/` with valid refresh token → 200, returns new `access`
-- [ ] URLs delegate from `config/urls.py` to `apps.users.urls` via `include()`
-- [ ] All 8 tests pass (`pytest`)
-- [ ] `ruff check backend/` passes clean
+- [x] `SIMPLE_JWT` config added to settings: `ACCESS_TOKEN_LIFETIME = 30 min`, `REFRESH_TOKEN_LIFETIME = 7 days`
+- [x] `SignUpSerializer` validates email (required, unique) and password (required, min 8 chars, write_only)
+- [x] `SignUpSerializer.create()` creates user via `CustomUser.objects.create_user()` and generates JWT tokens
+- [x] POST `/api/auth/signup/` with valid email + password → 201, returns `{ access, refresh }`
+- [x] POST `/api/auth/signup/` with duplicate email → 400, field-level error on `email`
+- [x] POST `/api/auth/signup/` with missing email → 400
+- [x] POST `/api/auth/signup/` with missing password → 400
+- [x] POST `/api/auth/login/` with valid credentials → 200, returns `{ access, refresh }`
+- [x] POST `/api/auth/login/` with wrong password → 401
+- [x] POST `/api/auth/login/` with non-existent email → 401
+- [x] POST `/api/auth/refresh/` with valid refresh token → 200, returns new `access`
+- [x] URLs delegate from `config/urls.py` to `apps.users.urls` via `include()`
+- [x] All 8 tests pass (`pytest`)
+- [x] `ruff check backend/` passes clean
 
 ## Blocked by
 
