@@ -1,12 +1,20 @@
 "use client";
 
-import { Suspense } from "react";
+import { Suspense, useState } from "react";
 import { CategoriesSidebar } from "@/features/categories/components/categories-sidebar";
 import { CreateNoteButton } from "@/features/notes/components/create-note-button";
 import { MobileTopBar } from "@/features/notes/components/mobile-top-bar";
 import { NotesGrid } from "@/features/notes/components/notes-grid";
+import { NoteEditor } from "@/features/notes/components/note-editor";
+import type { Note } from "@/features/notes/types";
 
 export default function NotesPage() {
+  const [selectedNoteId, setSelectedNoteId] = useState<number | null>(null);
+
+  function handleNoteCreated(note: Note) {
+    setSelectedNoteId(note.id);
+  }
+
   return (
     <div className="flex min-h-full flex-1">
       {/* Desktop sidebar — hidden on mobile */}
@@ -19,7 +27,7 @@ export default function NotesPage() {
       <main className="flex flex-1 flex-col p-6">
         {/* Mobile top bar — hidden on desktop */}
         <Suspense>
-          <MobileTopBar />
+          <MobileTopBar onNoteCreated={handleNoteCreated} />
         </Suspense>
 
         {/* Desktop header with title + create button */}
@@ -27,15 +35,20 @@ export default function NotesPage() {
           <h1 className="text-2xl font-bold">Notes</h1>
           <div className="hidden md:block">
             <Suspense>
-              <CreateNoteButton />
+              <CreateNoteButton onNoteCreated={handleNoteCreated} />
             </Suspense>
           </div>
         </div>
 
         <Suspense>
-          <NotesGrid />
+          <NotesGrid onSelectNote={setSelectedNoteId} />
         </Suspense>
       </main>
+
+      <NoteEditor
+        noteId={selectedNoteId}
+        onClose={() => setSelectedNoteId(null)}
+      />
     </div>
   );
 }

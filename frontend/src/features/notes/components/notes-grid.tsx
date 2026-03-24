@@ -4,7 +4,11 @@ import Image from "next/image";
 import { useNotes } from "@/features/notes/hooks/use-notes";
 import { NoteCard } from "@/features/notes/components/note-card";
 
-export function NotesGrid() {
+interface NotesGridProps {
+  onSelectNote: (id: number) => void;
+}
+
+export function NotesGrid({ onSelectNote }: NotesGridProps) {
   const { data: notes, isLoading } = useNotes();
 
   if (isLoading) {
@@ -22,7 +26,7 @@ export function NotesGrid() {
   return (
     <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
       {notes.map((note) => (
-        <NoteCard key={note.id} note={note} />
+        <NoteCard key={note.id} note={note} onSelect={onSelectNote} />
       ))}
     </div>
   );

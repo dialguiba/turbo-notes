@@ -1,22 +1,31 @@
 "use client";
 
-import { ChevronDown } from "lucide-react";
+import { useState } from "react";
+import { ChevronDown, Settings } from "lucide-react";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useCategories } from "@/features/categories/hooks/use-categories";
 import { CreateNoteButton } from "@/features/notes/components/create-note-button";
+import { MobileCategoryManager } from "@/features/categories/components/mobile-category-manager";
+import type { Note } from "@/features/notes/types";
 
-export function MobileTopBar() {
+interface MobileTopBarProps {
+  onNoteCreated?: (note: Note) => void;
+}
+
+export function MobileTopBar({ onNoteCreated }: MobileTopBarProps) {
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
   const { data: categories } = useCategories();
+  const [managerOpen, setManagerOpen] = useState(false);
 
   const activeCategoryId = searchParams.get("category");
 
@@ -73,10 +82,21 @@ export function MobileTopBar() {
               {cat.name}
             </DropdownMenuItem>
           ))}
+          <DropdownMenuSeparator />
+          <DropdownMenuItem onClick={() => setManagerOpen(true)}>
+            <Settings className="size-3.5" />
+            Manage Categories
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
 
-      <CreateNoteButton />
+      <CreateNoteButton onNoteCreated={onNoteCreated} />
+
+      <MobileCategoryManager
+        open={managerOpen}
+        onOpenChange={setManagerOpen}
+        onCategoryCreated={(cat) => setCategory(cat.id)}
+      />
     </div>
   );
 }

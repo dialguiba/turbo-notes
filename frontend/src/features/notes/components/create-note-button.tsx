@@ -4,10 +4,15 @@ import { Plus } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { useCreateNote } from "@/features/notes/hooks/use-create-note";
+import type { Note } from "@/features/notes/types";
 
-export function CreateNoteButton() {
+interface CreateNoteButtonProps {
+  onNoteCreated?: (note: Note) => void;
+}
+
+export function CreateNoteButton({ onNoteCreated }: CreateNoteButtonProps) {
   const searchParams = useSearchParams();
-  const createNote = useCreateNote();
+  const createNote = useCreateNote(onNoteCreated);
 
   const activeCategoryParam = searchParams.get("category");
   const categoryId = activeCategoryParam

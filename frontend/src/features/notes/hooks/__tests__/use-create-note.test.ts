@@ -5,9 +5,8 @@ import { createElement, type ReactNode } from "react";
 
 // --- Mocks ---------------------------------------------------------------
 
-const mockPush = vi.fn();
 vi.mock("next/navigation", () => ({
-  useRouter: () => ({ push: mockPush }),
+  useRouter: () => ({ push: vi.fn() }),
   useSearchParams: () => new URLSearchParams(),
 }));
 
@@ -64,15 +63,17 @@ describe("useCreateNote", () => {
     expect(mockPost).toHaveBeenCalledWith("/api/notes/", { category: null });
   });
 
-  it("navigates to /notes/<id> on success", async () => {
-    mockPost.mockResolvedValue({ id: 99, title: "", content: "", category: null });
+  it("calls onCreated callback with the new note on success", async () => {
+    const createdNote = { id: 99, title: "", content: "", category: null };
+    mockPost.mockResolvedValue(createdNote);
     const { wrapper } = createWrapper();
+    const onCreated = vi.fn();
 
-    const { result } = renderHook(() => useCreateNote(), { wrapper });
+    const { result } = renderHook(() => useCreateNote(onCreated), { wrapper });
 
     await act(() => result.current.mutateAsync({ category: null }));
 
-    expect(mockPush).toHaveBeenCalledWith("/notes/99");
+    expect(onCreated).toHaveBeenCalledWith(createdNote);
   });
 
   it("invalidates notes and categories caches on success", async () => {
@@ -90,16 +91,17 @@ describe("useCreateNote", () => {
     });
   });
 
-  it("does not navigate when the API call fails", async () => {
+  it("does not call onCreated when the API call fails", async () => {
     mockPost.mockRejectedValue(new Error("Server error"));
     const { wrapper } = createWrapper();
+    const onCreated = vi.fn();
 
-    const { result } = renderHook(() => useCreateNote(), { wrapper });
+    const { result } = renderHook(() => useCreateNote(onCreated), { wrapper });
 
     await act(async () => {
       await result.current.mutateAsync({ category: null }).catch(() => {});
     });
 
-    expect(mockPush).not.toHaveBeenCalled();
+    expect(onCreated).not.toHaveBeenCalled();
   });
 });
