@@ -28,6 +28,8 @@ export function SignupForm() {
     try {
       await signup(email, password);
       router.push("/notes");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "An unexpected error occurred.");
     } finally {
       setIsSubmitting(false);
     }

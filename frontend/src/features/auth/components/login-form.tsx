@@ -12,15 +12,19 @@ export function LoginForm() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+    setError("");
 
     setIsSubmitting(true);
     try {
       await login(email, password);
       router.push("/notes");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "An unexpected error occurred.");
     } finally {
       setIsSubmitting(false);
     }
@@ -61,6 +65,8 @@ export function LoginForm() {
           onChange={(e) => setPassword(e.target.value)}
           required
         />
+
+        {error && <p className="text-xs text-red-600">{error}</p>}
 
         <CoreButton
           type="submit"

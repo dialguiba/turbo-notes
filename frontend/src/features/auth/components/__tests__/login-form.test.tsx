@@ -33,4 +33,48 @@ describe("LoginForm", () => {
       expect(mockPush).toHaveBeenCalledWith("/notes");
     });
   });
+
+  it("displays server error inline when login fails", async () => {
+    const user = userEvent.setup();
+    mockLogin.mockRejectedValue(
+      new Error("No active account found with the given credentials."),
+    );
+    render(<LoginForm />);
+
+    await user.type(screen.getByPlaceholderText("Email address"), "bad@test.com");
+    await user.type(screen.getByPlaceholderText("Password"), "wrongpass");
+    await user.click(screen.getByRole("button", { name: /login/i }));
+
+    await waitFor(() => {
+      expect(
+        screen.getByText("No active account found with the given credentials."),
+      ).toBeInTheDocument();
+    });
+    expect(mockPush).not.toHaveBeenCalled();
+  });
+
+  it("clears the error when submitting again", async () => {
+    const user = userEvent.setup();
+    mockLogin
+      .mockRejectedValueOnce(new Error("No active account found with the given credentials."))
+      .mockResolvedValueOnce(undefined);
+    render(<LoginForm />);
+
+    await user.type(screen.getByPlaceholderText("Email address"), "bad@test.com");
+    await user.type(screen.getByPlaceholderText("Password"), "wrongpass");
+    await user.click(screen.getByRole("button", { name: /login/i }));
+
+    await waitFor(() => {
+      expect(
+        screen.getByText("No active account found with the given credentials."),
+      ).toBeInTheDocument();
+    });
+
+    // Submit again — error should clear during submission
+    await user.click(screen.getByRole("button", { name: /login/i }));
+
+    await waitFor(() => {
+      expect(mockPush).toHaveBeenCalledWith("/notes");
+    });
+  });
 });

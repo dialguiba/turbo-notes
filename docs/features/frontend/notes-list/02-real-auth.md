@@ -14,15 +14,15 @@ Remove mock auth code from `AuthProvider` and delete `lib/mock-data.ts`.
 
 ## Acceptance criteria
 
-- [ ] Signup form calls `POST /api/auth/signup/` and stores tokens on success
-- [ ] Login form calls `POST /api/auth/login/` and stores tokens on success
-- [ ] Logout clears tokens from localStorage and redirects to `/login`
-- [ ] Session persists across browser refresh (tokens read from localStorage on mount)
-- [ ] Server-side errors display inline on login form (e.g., invalid credentials)
-- [ ] Server-side errors display inline on signup form (e.g., email already exists)
-- [ ] Mock auth functions removed from `AuthProvider`
-- [ ] `lib/mock-data.ts` deleted
-- [ ] Existing login/signup form tests updated to cover server error display
+- [x] Signup form calls `POST /api/auth/signup/` and stores tokens on success
+- [x] Login form calls `POST /api/auth/login/` and stores tokens on success
+- [x] Logout clears tokens from localStorage and redirects to `/login`
+- [x] Session persists across browser refresh (tokens read from localStorage on mount)
+- [x] Server-side errors display inline on login form (e.g., invalid credentials)
+- [x] Server-side errors display inline on signup form (e.g., email already exists)
+- [x] Mock auth functions removed from `AuthProvider`
+- [x] `lib/mock-data.ts` deleted
+- [x] Existing login/signup form tests updated to cover server error display
 
 ## Blocked by
 

@@ -8,7 +8,13 @@ import {
   useState,
 } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { apiClient, ApiError, clearTokens, getAccessToken, setTokens } from "@/lib/api-client";
 import type { User } from "@/features/auth/types";
+
+interface TokenResponse {
+  access: string;
+  refresh: string;
+}
 
 interface AuthContextValue {
   user: User | null;
@@ -26,21 +32,77 @@ export function useAuth() {
   return ctx;
 }
 
-function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<User | null>(null);
+/** Extract a human-readable message from DRF error responses. */
+function extractErrorMessage(err: unknown): string {
+  if (err instanceof ApiError && err.data && typeof err.data === "object") {
+    const data = err.data as Record<string, unknown>;
 
-  const login = useCallback(async (_email: string, _password: string) => {
-    // Mock — will be replaced with real API call
-    setUser({ id: 1, email: _email });
+    // simplejwt style: { detail: "..." }
+    if (typeof data.detail === "string") return data.detail;
+
+    // DRF field errors: { email: ["..."], password: ["..."] }
+    for (const value of Object.values(data)) {
+      if (Array.isArray(value) && typeof value[0] === "string") return value[0];
+    }
+  }
+  if (err instanceof Error) return err.message;
+  return "An unexpected error occurred.";
+}
+
+function decodeJwtPayload(token: string): Record<string, unknown> {
+  const base64Url = token.split(".")[1];
+  const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+  return JSON.parse(atob(base64));
+}
+
+function restoreUser(): User | null {
+  if (typeof window === "undefined") return null;
+  const token = getAccessToken();
+  if (!token) return null;
+  try {
+    const payload = decodeJwtPayload(token);
+    return { id: payload.user_id as number, email: (payload.email as string) ?? "" };
+  } catch {
+    clearTokens();
+    return null;
+  }
+}
+
+function AuthProvider({ children }: { children: React.ReactNode }) {
+  const [user, setUser] = useState<User | null>(restoreUser);
+
+  const login = useCallback(async (email: string, password: string) => {
+    try {
+      const tokens = await apiClient.post<TokenResponse>("/api/auth/login/", {
+        email,
+        password,
+      });
+      setTokens(tokens.access, tokens.refresh);
+      const payload = decodeJwtPayload(tokens.access);
+      setUser({ id: payload.user_id as number, email });
+    } catch (err) {
+      throw new Error(extractErrorMessage(err));
+    }
   }, []);
 
-  const signup = useCallback(async (_email: string, _password: string) => {
-    // Mock — will be replaced with real API call
-    setUser({ id: 1, email: _email });
+  const signup = useCallback(async (email: string, password: string) => {
+    try {
+      const tokens = await apiClient.post<TokenResponse>("/api/auth/signup/", {
+        email,
+        password,
+      });
+      setTokens(tokens.access, tokens.refresh);
+      const payload = decodeJwtPayload(tokens.access);
+      setUser({ id: payload.user_id as number, email });
+    } catch (err) {
+      throw new Error(extractErrorMessage(err));
+    }
   }, []);
 
   const logout = useCallback(() => {
+    clearTokens();
     setUser(null);
+    window.location.href = "/login";
   }, []);
 
   const value = useMemo(
