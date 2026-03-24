@@ -8,6 +8,7 @@ import {
   useState,
 } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { Toaster } from "@/components/ui/sonner";
 import { apiClient, ApiError, clearTokens, getAccessToken, setTokens } from "@/lib/api-client";
 import type { User } from "@/features/auth/types";
 
@@ -125,6 +126,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>{children}</AuthProvider>
+      <Toaster position="bottom-right" />
     </QueryClientProvider>
   );
 }
