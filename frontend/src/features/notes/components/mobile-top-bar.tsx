@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { ChevronDown, Settings } from "lucide-react";
-import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -12,6 +11,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useCategories } from "@/features/categories/hooks/use-categories";
+import { useCategoryFilter } from "@/features/categories/hooks/use-category-filter";
 import { CreateNoteButton } from "@/features/notes/components/create-note-button";
 import { MobileCategoryManager } from "@/features/categories/components/mobile-category-manager";
 import type { Note } from "@/features/notes/types";
@@ -21,29 +21,14 @@ interface MobileTopBarProps {
 }
 
 export function MobileTopBar({ onNoteCreated }: MobileTopBarProps) {
-  const searchParams = useSearchParams();
-  const router = useRouter();
-  const pathname = usePathname();
   const { data: categories } = useCategories();
+  const { activeCategoryId, setCategory } = useCategoryFilter();
   const [managerOpen, setManagerOpen] = useState(false);
-
-  const activeCategoryId = searchParams.get("category");
 
   const activeCategory = categories?.find(
     (c) => String(c.id) === activeCategoryId,
   );
   const label = activeCategory ? activeCategory.name : "All Categories";
-
-  function setCategory(id: number | null) {
-    const params = new URLSearchParams(searchParams.toString());
-    if (id === null) {
-      params.delete("category");
-    } else {
-      params.set("category", String(id));
-    }
-    const qs = params.toString();
-    router.push(qs ? `${pathname}?${qs}` : pathname);
-  }
 
   return (
     <div className="flex items-center justify-between gap-2 md:hidden">

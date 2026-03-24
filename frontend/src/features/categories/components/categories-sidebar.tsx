@@ -2,10 +2,10 @@
 
 import { useState } from "react";
 import { Plus } from "lucide-react";
-import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useCategories } from "@/features/categories/hooks/use-categories";
+import { useCategoryFilter } from "@/features/categories/hooks/use-category-filter";
 import { CategoryDialog } from "@/features/categories/components/category-dialog";
 import type { Category } from "@/features/categories/types";
 
@@ -38,24 +38,9 @@ function CategoryItem({
 }
 
 export function CategoriesSidebar() {
-  const searchParams = useSearchParams();
-  const router = useRouter();
-  const pathname = usePathname();
   const { data: categories, isLoading } = useCategories();
+  const { activeCategoryId, setCategory } = useCategoryFilter();
   const [createOpen, setCreateOpen] = useState(false);
-
-  const activeCategoryId = searchParams.get("category");
-
-  function setCategory(id: number | null) {
-    const params = new URLSearchParams(searchParams.toString());
-    if (id === null) {
-      params.delete("category");
-    } else {
-      params.set("category", String(id));
-    }
-    const qs = params.toString();
-    router.push(qs ? `${pathname}?${qs}` : pathname);
-  }
 
   if (isLoading) {
     return (
