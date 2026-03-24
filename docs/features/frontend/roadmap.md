@@ -15,9 +15,9 @@ Auth screens were built with mock data first (PRD 2) to focus on UI without JWT 
 | 3 | Notes List + Sidebar | Not started | PRD 2 + BE notes & auth API | [`notes-list/`](notes-list/) |
 | 4 | Note Editor | Not started | PRD 3 + BE notes API | [`note-editor/`](note-editor/) |
 | 5 | Category Management | Not started | PRD 3 + BE categories API | [`category-management/`](category-management/) |
-| 6 | Voice-to-Text | Not started | PRD 4 | [`voice-to-text/`](voice-to-text/) |
+| 6 | Voice-to-Text | PRD written | PRD 4 | [`voice-to-text/`](voice-to-text/) |
 | 7 | ~~Auth Integration~~ | Merged into PRD 3 | — | — |
-| 8 | E2E Tests (Playwright) | Not started | PRDs 3-6 | [`e2e-tests/`](e2e-tests/) |
+| 8 | E2E Tests (Playwright) _(optional)_ | Not started | PRDs 3-6 | [`e2e-tests/`](e2e-tests/) |
 
 ## Implementation Order
 

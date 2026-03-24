@@ -187,13 +187,18 @@ Each note is displayed as a preview card containing:
 ### 5.4 Voice-to-Text
 
 - A **floating button** (headphones icon) is displayed at the **bottom right** of the editor
-- On press, the button **expands into a pill/bar** with the following controls:
+- The floating button is **always visible** — the editor uses internal scroll so the button is never occluded by content
+- On press, the button **expands into a pill/bar** (animates toward the left) with the following controls:
   - **Microphone icon** — indicates recording is active
   - **Stop/hang-up button** (red) — stops the recording
-  - **Equalizer/waveform visualization** — shows audio activity
+  - **Equalizer/waveform visualization** — real-time audio bars reflecting actual microphone input
+  - **Language badge** — 2-letter code (e.g., "EN", "ES") showing the auto-detected transcription language
+  - **Cursor position indicator** — shows that text is being inserted at the cursor position
   - **Headphones icon**
-- Dictated speech is **transcribed to text** and appended to the note content
-- The floating button is hidden or overlapped when note content is extensive
+- Dictated speech is **transcribed to text** and **inserted at the cursor position** in the note content
+- If the cursor is at the end or the textarea has no focus, text is appended to the end
+- Uses the **browser's native Web Speech API** (Chromium only). Unsupported browsers see an informational message when clicking the button
+- Transcription auto-restarts after silence pauses; the user must press Stop to end recording
 
 ---
 
@@ -234,5 +239,8 @@ The following reusable components are used across the application:
 - [ ] User can edit existing notes (title, content, category)
 - [ ] User can create custom categories
 - [ ] User can edit the name and color of any category
-- [ ] User can dictate notes using voice-to-text
+- [ ] User can dictate notes using voice-to-text (Chrome only; other browsers show informational message)
+- [ ] Voice-to-text inserts dictated text at the cursor position
+- [ ] Pill bar shows real-time waveform, language badge, and cursor position indicator
+- [ ] Recording auto-restarts after silence; user presses Stop to end
 - [ ] Note editor opens as a fullscreen/modal view with X button to close
