@@ -14,20 +14,20 @@ On mobile, the ellipsis and edit flow work identically within the fullscreen man
 
 ## Acceptance criteria
 
-- [ ] Each sidebar category shows an ellipsis ("...") button on hover/keyboard focus (desktop)
-- [ ] Ellipsis is always visible on the mobile management sheet
-- [ ] Clicking ellipsis opens a `DropdownMenu` with "Edit" and "Delete" items
-- [ ] "Edit" opens `CategoryDialog` pre-filled with current name and color
-- [ ] User can change name, color, or both and save
-- [ ] Save is disabled if name is empty or whitespace-only
-- [ ] On submit: sidebar updates optimistically (instant visual feedback)
-- [ ] On error: toast notification + silent UI rollback
-- [ ] On settle: `["notes"]` query is invalidated (note cards update)
-- [ ] Duplicate name error surfaces via toast (dialog is already closed)
-- [ ] Standard keyboard navigation: Tab to ellipsis, Enter/Space to open menu, arrow keys, Escape to close
-- [ ] Mobile: edit flow works within the fullscreen management sheet
-- [ ] `pnpm build` passes with no TypeScript errors
-- [ ] `pnpm lint` passes
+- [x] Each sidebar category shows an ellipsis ("...") button on hover/keyboard focus (desktop)
+- [x] Ellipsis is always visible on the mobile management sheet
+- [x] Clicking ellipsis opens a `DropdownMenu` with "Edit" and "Delete" items
+- [x] "Edit" opens `CategoryDialog` pre-filled with current name and color
+- [x] User can change name, color, or both and save
+- [x] Save is disabled if name is empty or whitespace-only
+- [x] On submit: sidebar updates optimistically (instant visual feedback)
+- [x] On error: toast notification + silent UI rollback
+- [x] On settle: `["notes"]` query is invalidated (note cards update)
+- [x] Duplicate name error surfaces via toast (dialog is already closed)
+- [x] Standard keyboard navigation: Tab to ellipsis, Enter/Space to open menu, arrow keys, Escape to close
+- [x] Mobile: edit flow works within the fullscreen management sheet
+- [x] `pnpm build` passes with no TypeScript errors
+- [x] `pnpm lint` passes
 
 ## Blocked by
 
