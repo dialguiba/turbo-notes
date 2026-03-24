@@ -4,7 +4,10 @@ import { SubmitEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { useAuth } from "@/app/providers";
-import { CoreButton, CoreInput, TextLink } from "@/components/core";
+import Link from "next/link";
+import { PasswordInput } from "@/components/core";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 export function LoginForm() {
   const router = useRouter();
@@ -52,7 +55,7 @@ export function LoginForm() {
       </h1>
 
       <form onSubmit={handleSubmit} className="flex w-full flex-col gap-4">
-        <CoreInput
+        <Input
           type="email"
           placeholder="Email address"
           value={email}
@@ -60,8 +63,7 @@ export function LoginForm() {
           required
         />
 
-        <CoreInput
-          variant="password"
+        <PasswordInput
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
@@ -70,17 +72,17 @@ export function LoginForm() {
 
         {error && <p className="text-xs text-red-600">{error}</p>}
 
-        <CoreButton
+        <Button
           type="submit"
-          variant="outlined"
+          variant="outline"
           className="w-full"
           disabled={isSubmitting}
         >
           {isSubmitting ? "Logging in..." : "Login"}
-        </CoreButton>
+        </Button>
       </form>
 
-      <TextLink href="/signup">Oops! I&apos;ve never been here before</TextLink>
+      <Link href="/signup" className="text-xs underline">Oops! I&apos;ve never been here before</Link>
     </div>
   );
 }
