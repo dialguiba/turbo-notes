@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { SubmitEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { useAuth } from "@/app/providers";
@@ -15,7 +15,7 @@ export function LoginForm() {
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  async function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
     setError("");
 
@@ -24,7 +24,9 @@ export function LoginForm() {
       await login(email, password);
       router.push("/notes");
     } catch (err) {
-      setError(err instanceof Error ? err.message : "An unexpected error occurred.");
+      setError(
+        err instanceof Error ? err.message : "An unexpected error occurred.",
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -37,13 +39,13 @@ export function LoginForm() {
         alt="Cactus mascot"
         width={100}
         height={100}
-        className="h-auto min-w-[60px]"
+        className="h-auto min-w-15"
         style={{ width: "7.4vw" }}
         priority
       />
 
       <h1
-        className="text-center font-heading font-bold text-title-brown"
+        className="font-heading text-title-brown text-center font-bold"
         style={{ fontSize: "clamp(1.5rem, 4vw, 2.25rem)" }}
       >
         Yay, You&apos;re Back!
