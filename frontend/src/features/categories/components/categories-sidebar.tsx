@@ -8,6 +8,7 @@ import { useCategories } from "@/features/categories/hooks/use-categories";
 import { useCategoryFilter } from "@/features/categories/hooks/use-category-filter";
 import { CategoryDialog } from "@/features/categories/components/category-dialog";
 import { CategoryContextMenu } from "@/features/categories/components/category-context-menu";
+import { DeleteCategoryDialog } from "@/features/categories/components/delete-category-dialog";
 import type { Category } from "@/features/categories/types";
 
 function CategoryItem({
@@ -54,6 +55,7 @@ export function CategoriesSidebar() {
   const { activeCategoryId, setCategory } = useCategoryFilter();
   const [createOpen, setCreateOpen] = useState(false);
   const [editingCategory, setEditingCategory] = useState<Category | null>(null);
+  const [deletingCategory, setDeletingCategory] = useState<Category | null>(null);
 
   if (isLoading) {
     return (
@@ -88,7 +90,7 @@ export function CategoriesSidebar() {
               isActive={activeCategoryId === String(cat.id)}
               onClick={() => setCategory(cat.id)}
               onEdit={() => setEditingCategory(cat)}
-              onDelete={() => {/* wired in next commit */}}
+              onDelete={() => setDeletingCategory(cat)}
             />
           ))}
         </div>
@@ -121,6 +123,12 @@ export function CategoriesSidebar() {
         category={editingCategory ?? undefined}
       />
 
+      <DeleteCategoryDialog
+        category={deletingCategory}
+        onOpenChange={(open) => {
+          if (!open) setDeletingCategory(null);
+        }}
+      />
     </nav>
   );
 }

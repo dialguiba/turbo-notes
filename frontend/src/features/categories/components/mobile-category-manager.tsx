@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { useCategories } from "@/features/categories/hooks/use-categories";
 import { CategoryDialog } from "@/features/categories/components/category-dialog";
 import { CategoryContextMenu } from "@/features/categories/components/category-context-menu";
+import { DeleteCategoryDialog } from "@/features/categories/components/delete-category-dialog";
 import type { Category } from "@/features/categories/types";
 
 interface MobileCategoryManagerProps {
@@ -27,6 +28,7 @@ export function MobileCategoryManager({
   const { data: categories } = useCategories();
   const [createOpen, setCreateOpen] = useState(false);
   const [editingCategory, setEditingCategory] = useState<Category | null>(null);
+  const [deletingCategory, setDeletingCategory] = useState<Category | null>(null);
 
   return (
     <>
@@ -72,7 +74,7 @@ export function MobileCategoryManager({
                   )}
                   <CategoryContextMenu
                     onEdit={() => setEditingCategory(cat)}
-                    onDelete={() => {/* wired in next commit */}}
+                    onDelete={() => setDeletingCategory(cat)}
                   />
                 </div>
               ))}
@@ -112,6 +114,12 @@ export function MobileCategoryManager({
         category={editingCategory ?? undefined}
       />
 
+      <DeleteCategoryDialog
+        category={deletingCategory}
+        onOpenChange={(open) => {
+          if (!open) setDeletingCategory(null);
+        }}
+      />
     </>
   );
 }

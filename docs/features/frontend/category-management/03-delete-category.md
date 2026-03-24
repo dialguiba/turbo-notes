@@ -14,17 +14,17 @@ On mobile, the delete flow works identically within the fullscreen management sh
 
 ## Acceptance criteria
 
-- [ ] "Delete" from the context menu opens an `AlertDialog`
-- [ ] AlertDialog shows contextual message based on `note_count` (has notes vs. empty)
-- [ ] Confirmation always required (even for empty categories)
-- [ ] On confirm: category removed from sidebar optimistically
-- [ ] On error: toast notification + silent UI rollback
-- [ ] On settle: `["notes"]` and `["categories"]` queries invalidated
-- [ ] If deleted category was active filter (`?category={id}`), filter is cleared
-- [ ] AlertDialog prevents dismissal by clicking outside (proper `role="alertdialog"` semantics)
-- [ ] Mobile: delete flow works within the fullscreen management sheet
-- [ ] `pnpm build` passes with no TypeScript errors
-- [ ] `pnpm lint` passes
+- [x] "Delete" from the context menu opens an `AlertDialog`
+- [x] AlertDialog shows contextual message based on `note_count` (has notes vs. empty)
+- [x] Confirmation always required (even for empty categories)
+- [x] On confirm: category removed from sidebar optimistically
+- [x] On error: toast notification + silent UI rollback
+- [x] On settle: `["notes"]` and `["categories"]` queries invalidated
+- [x] If deleted category was active filter (`?category={id}`), filter is cleared
+- [x] AlertDialog prevents dismissal by clicking outside (proper `role="alertdialog"` semantics)
+- [x] Mobile: delete flow works within the fullscreen management sheet
+- [x] `pnpm build` passes with no TypeScript errors
+- [x] `pnpm lint` passes
 
 ## Blocked by
 
