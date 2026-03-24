@@ -55,11 +55,14 @@ ruff check . --fix                  # lint + autofix
 
 ```
 cd frontend
+nvm use                             # switch to Node 24 LTS (from .nvmrc)
 pnpm dev                            # localhost:3000
 pnpm build                          # production build (catches TS errors)
 pnpm lint                           # ESLint
 pnpm format                         # Prettier write
 pnpm format:check                   # Prettier check (CI)
+pnpm test                           # Vitest (uses --no-webstorage for Node 25+ compat)
+pnpm test:watch                     # Vitest watch mode
 ```
 
 # Architecture Decisions
@@ -95,7 +98,7 @@ See source of truth: `backend/config/urls.py`, `backend/apps/users/views.py`, `b
 # Workflow
 
 - Backend: follow TDD — write the test first, then the implementation
-- Frontend: auth screens use mock data (PRD 2); feature PRDs (3-6) build UI with real API integration; auth integration (PRD 7) last
+- Frontend: auth screens were built with mock data (PRD 2); PRD 3 replaces mock auth with real JWT integration before building notes UI; feature PRDs (3-6) build UI with real API and real auth
 - Run linter after every change (`ruff` for backend, `pnpm lint` for frontend)
 - Mark tasks as complete in the tasks.md file after each implementation
 - Never skip a failing test — fix it before moving on
