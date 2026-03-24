@@ -90,7 +90,11 @@ function getOrStartRefresh(): Promise<string> {
 // Auth endpoints that should NOT trigger a refresh on 401
 // ---------------------------------------------------------------------------
 
-const AUTH_PATHS = ["/api/auth/login/", "/api/auth/signup/", "/api/auth/refresh/"];
+const AUTH_PATHS = [
+  "/api/auth/login/",
+  "/api/auth/signup/",
+  "/api/auth/refresh/",
+];
 
 function isAuthPath(path: string): boolean {
   return AUTH_PATHS.some((p) => path.includes(p));
@@ -100,7 +104,10 @@ function isAuthPath(path: string): boolean {
 // Helpers
 // ---------------------------------------------------------------------------
 
-function buildHeaders(method: string, token: string | null): Record<string, string> {
+function buildHeaders(
+  method: string,
+  token: string | null,
+): Record<string, string> {
   const headers: Record<string, string> = {};
   const hasBody = method !== "GET" && method !== "DELETE";
   if (hasBody) {
@@ -112,7 +119,11 @@ function buildHeaders(method: string, token: string | null): Record<string, stri
   return headers;
 }
 
-function buildInit(method: string, headers: Record<string, string>, body?: unknown): RequestInit {
+function buildInit(
+  method: string,
+  headers: Record<string, string>,
+  body?: unknown,
+): RequestInit {
   const init: RequestInit = { method, headers };
   if (body !== undefined) {
     init.body = JSON.stringify(body);
@@ -157,7 +168,9 @@ async function request<T>(
     }
 
     // Attempt token refresh — on failure, kill the session
-    const newAccess = await getOrStartRefresh().catch(() => handleSessionExpired());
+    const newAccess = await getOrStartRefresh().catch(() =>
+      handleSessionExpired(),
+    );
 
     // Retry the original request with the new token
     const retryHeaders = buildHeaders(method, newAccess);
@@ -167,7 +180,10 @@ async function request<T>(
     if (retryRes.ok) return parseResponse<T>(retryRes);
 
     // Retry failed for a non-auth reason (e.g. 500) — surface the real error
-    throw new ApiError(retryRes.status, await retryRes.json().catch(() => null));
+    throw new ApiError(
+      retryRes.status,
+      await retryRes.json().catch(() => null),
+    );
   }
 
   // --- Other errors ---
