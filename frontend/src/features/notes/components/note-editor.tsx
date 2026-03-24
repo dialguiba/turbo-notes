@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Trash2, X } from "lucide-react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
@@ -14,6 +14,7 @@ import { useAutoSave } from "@/features/notes/hooks/use-auto-save";
 import { useDeleteNote } from "@/features/notes/hooks/use-delete-note";
 import { CategoryDropdown } from "@/features/notes/components/category-dropdown";
 import { DeleteNoteDialog } from "@/features/notes/components/delete-note-dialog";
+import { VoiceButton } from "@/features/notes/components/voice-button";
 import { formatEditorDate } from "@/features/notes/format-editor-date";
 import { apiClient } from "@/lib/api-client";
 import type { Note, NoteCategory } from "@/features/notes/types";
@@ -66,6 +67,8 @@ function EditorContent({ note, onClose }: { note: Note; onClose: () => void }) {
   const [lastEdited, setLastEdited] = useState(note.updated_at);
 
   const [deleteOpen, setDeleteOpen] = useState(false);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const [cursorPosition, setCursorPosition] = useState(note.content.length);
 
   const autoSave = useAutoSave({ noteId: note.id });
   const deleteNote = useDeleteNote();
@@ -164,14 +167,28 @@ function EditorContent({ note, onClose }: { note: Note; onClose: () => void }) {
           className="mb-3 bg-transparent text-2xl font-bold outline-none placeholder:opacity-40"
         />
 
-        {/* Content */}
-        <textarea
-          value={content}
-          onChange={(e) => handleContentChange(e.target.value)}
-          placeholder="Pour your heart out..."
-          aria-label="Note content"
-          className="flex-1 resize-none bg-transparent text-base leading-relaxed outline-none placeholder:opacity-40"
-        />
+        {/* Content + VoiceButton wrapper */}
+        <div className="relative flex flex-1 flex-col">
+          <textarea
+            ref={textareaRef}
+            value={content}
+            onChange={(e) => handleContentChange(e.target.value)}
+            onSelect={() => {
+              if (textareaRef.current) {
+                setCursorPosition(textareaRef.current.selectionStart);
+              }
+            }}
+            placeholder="Pour your heart out..."
+            aria-label="Note content"
+            className="flex-1 resize-none bg-transparent text-base leading-relaxed outline-none placeholder:opacity-40"
+          />
+          <VoiceButton
+            content={content}
+            cursorPosition={cursorPosition}
+            onContentChange={handleContentChange}
+            onFlush={autoSave.flush}
+          />
+        </div>
       </div>
 
       <DeleteNoteDialog
