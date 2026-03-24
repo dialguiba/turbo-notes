@@ -66,7 +66,6 @@ pnpm format:check                   # Prettier check (CI)
 
 - Monolito modular con Django REST Framework, organizado por apps de dominio (`notes`, `users`) con API REST stateless y autenticación JWT
 - API calls go through `frontend/src/lib/api-client.ts` — never `fetch()` directly in components
-- Mock data lives in api-client during scaffold phase; swapped to real fetch in integration PRDs 7-9
 - Custom colors (categories, auth bg) defined via `@theme` in `globals.css`
 - Use shadcn tokens for UI chrome, custom tokens for business colors
 - Route params and searchParams are async in Next.js 16 (must be awaited)
@@ -96,7 +95,7 @@ See source of truth: `backend/config/urls.py`, `backend/apps/users/views.py`, `b
 # Workflow
 
 - Backend: follow TDD — write the test first, then the implementation
-- Frontend: build with mock data first (PRDs 1-6), integrate real API later (PRDs 7-9)
+- Frontend: auth screens use mock data (PRD 2); feature PRDs (3-6) build UI with real API integration; auth integration (PRD 7) last
 - Run linter after every change (`ruff` for backend, `pnpm lint` for frontend)
 - Mark tasks as complete in the tasks.md file after each implementation
 - Never skip a failing test — fix it before moving on

@@ -107,7 +107,7 @@ Category filtering: `?category=<id>` returns notes in that category; `?category=
 - Note sharing between users
 - Rich text / markdown content
 - Voice-to-text transcription endpoint
-- Frontend integration (PRDs 7-9)
+- Frontend integration (FE PRDs 3-5)
 - Configurable ordering via query params
 
 ## Further Notes

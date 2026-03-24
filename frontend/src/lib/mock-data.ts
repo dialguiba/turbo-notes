@@ -1,2 +1,2 @@
-// Mock data constants — empty shell for scaffold phase.
-// Feature PRDs will populate this with mock data for UI development.
+// Mock data constants — used by auth screens (PRD 2) only.
+// Feature PRDs (3-6) use real API data instead.

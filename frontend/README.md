@@ -35,7 +35,7 @@ frontend/src/
 │   └── categories/          # Categories feature module
 ├── lib/
 │   ├── api-client.ts        # Centralized API client (all fetch calls go here)
-│   ├── mock-data.ts         # Mock data for scaffold phase
+│   ├── mock-data.ts         # Mock data (auth screens only)
 │   └── utils.ts             # Shared utilities (cn, etc.)
 ```
 
@@ -84,7 +84,7 @@ pnpm dev                     # http://localhost:3000
 - **Route groups** — `(auth)` and `(dashboard)` provide separate layouts without affecting URLs
 - **Feature modules** — components, hooks, and types colocated per domain (`auth`, `notes`, `categories`)
 - **Centralized API client** — all API calls go through `lib/api-client.ts`, never raw `fetch()` in components
-- **Mock-first development** — PRDs 1-6 use mock data in `lib/mock-data.ts`; real API integration comes in PRDs 7-9
+- **Auth mock, features integrated** — Auth screens (PRD 2) use mock auth; feature PRDs (3-6) integrate with real backend API directly; auth integration (PRD 7) last
 - **shadcn tokens for UI** — never use `bg-white` or `text-black` directly; use design tokens for theme support
 - **Custom theme tokens** — category colors and auth background defined via `@theme` in `globals.css`
 - **Import alias** — `@/*` resolves to `src/*`
