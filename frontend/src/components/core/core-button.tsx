@@ -42,4 +42,3 @@ function CoreButton({
 }
 
 export { CoreButton };
-export type { CoreButtonProps };
