@@ -14,14 +14,14 @@ Establish the `useCategories` hook in `features/categories/hooks/` and the `Cate
 
 ## Acceptance criteria
 
-- [ ] Categories fetched from `GET /api/categories/` via TanStack Query with key `["categories"]`
-- [ ] Sidebar displays each category with color dot, name, and note count
-- [ ] Note count hidden when category has 0 notes
-- [ ] "All Categories" option at the top of the list
-- [ ] Clicking a category sets `?category=<id>` in the URL
-- [ ] Clicking "All Categories" removes the `category` search param
-- [ ] Active category name is bold
-- [ ] Sidebar renders inside `/notes/page.tsx`, not in the layout
+- [x] Categories fetched from `GET /api/categories/` via TanStack Query with key `["categories"]`
+- [x] Sidebar displays each category with color dot, name, and note count
+- [x] Note count hidden when category has 0 notes
+- [x] "All Categories" option at the top of the list
+- [x] Clicking a category sets `?category=<id>` in the URL
+- [x] Clicking "All Categories" removes the `category` search param
+- [x] Active category name is bold
+- [x] Sidebar renders inside `/notes/page.tsx`, not in the layout
 
 ## Blocked by
 
