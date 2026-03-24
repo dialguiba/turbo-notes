@@ -52,13 +52,16 @@ features/<feature>/
 
 ### Prerequisites
 
-- Node.js 24+ (see `.nvmrc`)
+- **Node.js 24 LTS** (see `.nvmrc`) — run `nvm use` in the `frontend/` directory to switch
 - pnpm
+
+> **Node 25+ note:** Node 25 enables the Web Storage API natively, which conflicts with jsdom's `localStorage` in tests. The test scripts include `--no-webstorage` to work around this. If you're on Node 24 LTS this flag is harmless.
 
 ### Installation
 
 ```bash
 cd frontend
+nvm use                          # switch to Node 24 (from .nvmrc)
 pnpm install
 ```
 
@@ -78,13 +81,15 @@ pnpm dev                     # http://localhost:3000
 | `pnpm lint`          | Run ESLint                         |
 | `pnpm format`        | Format with Prettier               |
 | `pnpm format:check`  | Check formatting (CI)              |
+| `pnpm test`          | Run Vitest (unit tests)            |
+| `pnpm test:watch`    | Run Vitest in watch mode           |
 
 ## Key Design Decisions
 
 - **Route groups** — `(auth)` and `(dashboard)` provide separate layouts without affecting URLs
 - **Feature modules** — components, hooks, and types colocated per domain (`auth`, `notes`, `categories`)
 - **Centralized API client** — all API calls go through `lib/api-client.ts`, never raw `fetch()` in components
-- **Auth mock, features integrated** — Auth screens (PRD 2) use mock auth; feature PRDs (3-6) integrate with real backend API directly; auth integration (PRD 7) last
+- **Auth strategy** — Auth screens (PRD 2) were built with mock auth; PRD 3 replaces mock with real JWT integration before building notes UI; all feature PRDs (3-6) run with real auth
 - **shadcn tokens for UI** — never use `bg-white` or `text-black` directly; use design tokens for theme support
 - **Custom theme tokens** — category colors and auth background defined via `@theme` in `globals.css`
 - **Import alias** — `@/*` resolves to `src/*`

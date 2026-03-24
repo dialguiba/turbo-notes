@@ -45,13 +45,13 @@ This is strictly infrastructure — no feature UI, no mock data logic, no real p
 
 ### Providers
 
-- `src/app/providers.tsx` wraps children with `QueryClientProvider` (outer) and `AuthProvider` (inner, mock — provides `{ user, isAuthenticated, login, signup, logout }`)
+- `src/app/providers.tsx` wraps children with `QueryClientProvider` (outer) and `AuthProvider` (inner, initially mock — provides `{ user, isAuthenticated, login, signup, logout }`)
 - Wired into `src/app/layout.tsx`
 
 ### API client strategy
 
 - **API client pattern**: `lib/api-client.ts` exports typed functions. TanStack Query hooks call these. Feature PRDs (3-6) integrate with the real backend API directly.
-- Auth screens (PRD 2) use mock auth via the provider; real auth integration is PRD 7.
+- Auth screens (PRD 2) used mock auth via the provider; PRD 3 replaces mock with real JWT integration.
 
 ### Prettier config
 
@@ -72,7 +72,7 @@ This is strictly infrastructure — no feature UI, no mock data logic, no real p
 ## Out of Scope
 
 - Feature UI (auth screens, notes list, editor) — PRDs 2-6
-- Auth integration (JWT, protected routes) — PRD 7
+- Auth integration (JWT, protected routes) — included in PRD 3
 - httpOnly cookie setup on backend — backend PRD
 - Production assets/illustrations
 - Responsive/mobile layout

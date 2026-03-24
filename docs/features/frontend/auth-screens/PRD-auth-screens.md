@@ -116,9 +116,9 @@ Both Login and Signup follow the same vertical layout, centered on a beige (`#F5
 
 ## Out of Scope
 
-- Real API integration (login/signup endpoints) — PRD 7 (Auth Integration)
-- JWT token storage and refresh logic — PRD 7 (prerequisite: backend must migrate from token-in-body to httpOnly cookies before frontend integration)
-- Protected route middleware (redirect unauthenticated users) — PRD 7
+- ~~Real API integration (login/signup endpoints) — PRD 7 (Auth Integration)~~ → Moved to PRD 3
+- ~~JWT token storage and refresh logic — PRD 7~~ → Moved to PRD 3
+- ~~Protected route middleware (redirect unauthenticated users) — PRD 7~~ → Moved to PRD 3
 - "Forgot password" flow — not in current product specs
 - Dark mode styling for auth screens — separate initiative
 - Category Badge, Category Dropdown, and other core components not needed by auth — future PRDs
@@ -126,7 +126,7 @@ Both Login and Signup follow the same vertical layout, centered on a beige (`#F5
 
 ## Further Notes
 
-- The existing mock `AuthProvider` in `providers.tsx` already exposes `login()`, `signup()`, and `logout()` — no changes needed for this PRD.
-- The `lib/api-client.ts` shell exists but is not used in this PRD (mock auth is handled by the provider directly). API client usage starts in feature PRDs (3-6).
+- The mock `AuthProvider` in `providers.tsx` exposes `login()`, `signup()`, and `logout()`. PRD 3 will replace these with real JWT calls before building the notes UI.
+- The `lib/api-client.ts` shell exists but is not used in this PRD. PRD 3 will build the real api-client with JWT auth.
 - Font swap from Geist to Inter/Inria Serif is a global change that affects the entire app. Since only stub pages exist currently, there's no regression risk.
 - The core components establish a pattern: project components in `components/core/`, shadcn primitives in `components/ui/`. All feature code imports from `core/`, never directly from `ui/` for components that have a core equivalent.
