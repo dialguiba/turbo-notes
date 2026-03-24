@@ -14,13 +14,13 @@ Build the mobile top bar layout: on small screens, the sidebar is hidden and rep
 
 ## Acceptance criteria
 
-- [ ] "+ New Note" button visible on desktop (top right of main area)
-- [ ] Clicking "+ New Note" sends `POST /api/notes/` with `{ category: <active_filter_id> | null }`
-- [ ] On success, navigates to `/notes/<new_note_id>`
-- [ ] Cache invalidation: `["notes", ...]` and `["categories"]` are invalidated on create
-- [ ] Mobile: sidebar hidden, replaced by top bar with category dropdown (left) + "+ New Note" button (right)
-- [ ] Mobile category dropdown filters notes identically to the desktop sidebar (sets URL search param)
-- [ ] Responsive breakpoint: mobile bar shown on small screens, sidebar shown on desktop
+- [x] "+ New Note" button visible on desktop (top right of main area)
+- [x] Clicking "+ New Note" sends `POST /api/notes/` with `{ category: <active_filter_id> | null }`
+- [x] On success, navigates to `/notes/<new_note_id>`
+- [x] Cache invalidation: `["notes", ...]` and `["categories"]` are invalidated on create
+- [x] Mobile: sidebar hidden, replaced by top bar with category dropdown (left) + "+ New Note" button (right)
+- [x] Mobile category dropdown filters notes identically to the desktop sidebar (sets URL search param)
+- [x] Responsive breakpoint: mobile bar shown on small screens, sidebar shown on desktop
 
 ## Blocked by
 
