@@ -1,6 +1,8 @@
 // Typed API client — all API calls go through here.
 // Handles auth headers, token refresh on 401, and redirect on session expiry.
 
+import { AUTH_COOKIE_NAME } from "@/lib/auth-constants";
+
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
 
 // ---------------------------------------------------------------------------
@@ -21,11 +23,13 @@ export function getRefreshToken(): string | null {
 export function setTokens(access: string, refresh: string): void {
   localStorage.setItem(ACCESS_TOKEN_KEY, access);
   localStorage.setItem(REFRESH_TOKEN_KEY, refresh);
+  document.cookie = `${AUTH_COOKIE_NAME}=1; path=/; SameSite=Lax`;
 }
 
 export function clearTokens(): void {
   localStorage.removeItem(ACCESS_TOKEN_KEY);
   localStorage.removeItem(REFRESH_TOKEN_KEY);
+  document.cookie = `${AUTH_COOKIE_NAME}=; path=/; Max-Age=0`;
 }
 
 // ---------------------------------------------------------------------------

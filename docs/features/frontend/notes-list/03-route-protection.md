@@ -12,11 +12,11 @@ This slice can be built in parallel with issue 2 — both depend only on the tok
 
 ## Acceptance criteria
 
-- [ ] Visiting `/notes` without a token redirects to `/login`
-- [ ] Visiting `/notes/[id]` without a token redirects to `/login`
-- [ ] Visiting `/login` with a valid token redirects to `/notes`
-- [ ] Visiting `/signup` with a valid token redirects to `/notes`
-- [ ] Middleware only runs on relevant routes (not on static assets, API routes, etc.)
+- [x] Visiting `/notes` without a token redirects to `/login`
+- [x] Visiting `/notes/[id]` without a token redirects to `/login`
+- [x] Visiting `/login` with a valid token redirects to `/notes`
+- [x] Visiting `/signup` with a valid token redirects to `/notes`
+- [x] Middleware only runs on relevant routes (not on static assets, API routes, etc.)
 
 ## Blocked by
 
