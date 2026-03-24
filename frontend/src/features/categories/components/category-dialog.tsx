@@ -145,8 +145,12 @@ function CategoryForm({
           )}
         </div>
 
-        <div className="flex flex-col gap-1.5">
-          <Label>Color</Label>
+        <div
+          className="flex flex-col gap-1.5"
+          role="group"
+          aria-labelledby="color-label"
+        >
+          <Label id="color-label">Color</Label>
           <ColorPalette value={color} onChange={setColor} />
         </div>
       </div>
