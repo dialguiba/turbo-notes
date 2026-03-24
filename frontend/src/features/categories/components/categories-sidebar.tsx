@@ -1,7 +1,12 @@
 "use client";
 
+import { useState } from "react";
+import { Plus } from "lucide-react";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { useCategories } from "@/features/categories/hooks/use-categories";
+import { CategoryDialog } from "@/features/categories/components/category-dialog";
 import type { Category } from "@/features/categories/types";
 
 function CategoryItem({
@@ -37,6 +42,7 @@ export function CategoriesSidebar() {
   const router = useRouter();
   const pathname = usePathname();
   const { data: categories, isLoading } = useCategories();
+  const [createOpen, setCreateOpen] = useState(false);
 
   const activeCategoryId = searchParams.get("category");
 
@@ -60,7 +66,11 @@ export function CategoriesSidebar() {
   }
 
   return (
-    <nav className="w-56 shrink-0 space-y-1 py-4 pr-4" aria-label="Categories">
+    <nav
+      className="flex w-56 shrink-0 flex-col py-4 pr-4"
+      aria-label="Categories"
+    >
+      {/* All Categories — fixed at top */}
       <button
         onClick={() => setCategory(null)}
         className="flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm hover:bg-accent"
@@ -70,14 +80,38 @@ export function CategoriesSidebar() {
         </span>
       </button>
 
-      {categories?.map((cat) => (
-        <CategoryItem
-          key={cat.id}
-          category={cat}
-          isActive={activeCategoryId === String(cat.id)}
-          onClick={() => setCategory(cat.id)}
-        />
-      ))}
+      {/* Scrollable category list */}
+      <ScrollArea className="flex-1">
+        <div className="space-y-1">
+          {categories?.map((cat) => (
+            <CategoryItem
+              key={cat.id}
+              category={cat}
+              isActive={activeCategoryId === String(cat.id)}
+              onClick={() => setCategory(cat.id)}
+            />
+          ))}
+        </div>
+      </ScrollArea>
+
+      {/* "+" button pinned at bottom */}
+      <div className="pt-2">
+        <Button
+          variant="ghost"
+          size="sm"
+          className="w-full justify-start gap-2"
+          onClick={() => setCreateOpen(true)}
+        >
+          <Plus className="size-4" />
+          New Category
+        </Button>
+      </div>
+
+      <CategoryDialog
+        open={createOpen}
+        onOpenChange={setCreateOpen}
+        onSuccess={(cat) => setCategory(cat.id)}
+      />
     </nav>
   );
 }

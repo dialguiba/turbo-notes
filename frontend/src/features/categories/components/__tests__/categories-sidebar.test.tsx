@@ -1,6 +1,8 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { createElement, type ReactNode } from "react";
 
 // --- Mocks ---------------------------------------------------------------
 
@@ -16,6 +18,14 @@ vi.mock("next/navigation", () => ({
 const mockUseCategories = vi.fn();
 vi.mock("@/features/categories/hooks/use-categories", () => ({
   useCategories: () => mockUseCategories(),
+}));
+
+vi.mock("@/features/categories/hooks/use-create-category", () => ({
+  useCreateCategory: () => ({
+    mutateAsync: vi.fn(),
+    isPending: false,
+    reset: vi.fn(),
+  }),
 }));
 
 import { CategoriesSidebar } from "../categories-sidebar";
@@ -50,6 +60,18 @@ const categories: Category[] = [
   },
 ];
 
+// --- Helpers -------------------------------------------------------------
+
+function createWrapper() {
+  const queryClient = new QueryClient({
+    defaultOptions: { queries: { retry: false }, mutations: { retry: false } },
+  });
+  function Wrapper({ children }: { children: ReactNode }) {
+    return createElement(QueryClientProvider, { client: queryClient }, children);
+  }
+  return Wrapper;
+}
+
 // --- Tests ---------------------------------------------------------------
 
 describe("CategoriesSidebar", () => {
@@ -60,7 +82,7 @@ describe("CategoriesSidebar", () => {
   });
 
   it("renders all categories with color dot and name", () => {
-    render(<CategoriesSidebar />);
+    render(<CategoriesSidebar />, { wrapper: createWrapper() });
 
     expect(screen.getByText("All Categories")).toBeInTheDocument();
     expect(screen.getByText("Random Thoughts")).toBeInTheDocument();
@@ -69,7 +91,7 @@ describe("CategoriesSidebar", () => {
   });
 
   it("displays note count only when greater than 0", () => {
-    render(<CategoriesSidebar />);
+    render(<CategoriesSidebar />, { wrapper: createWrapper() });
 
     // "Random Thoughts" has 3 notes
     expect(screen.getByText("3")).toBeInTheDocument();
@@ -80,7 +102,7 @@ describe("CategoriesSidebar", () => {
   });
 
   it("renders color dots with correct background colors", () => {
-    render(<CategoriesSidebar />);
+    render(<CategoriesSidebar />, { wrapper: createWrapper() });
 
     const dots = document.querySelectorAll("[style]");
     const colors = Array.from(dots).map(
@@ -95,7 +117,7 @@ describe("CategoriesSidebar", () => {
 
   it("sets ?category=<id> when clicking a category", async () => {
     const user = userEvent.setup();
-    render(<CategoriesSidebar />);
+    render(<CategoriesSidebar />, { wrapper: createWrapper() });
 
     await user.click(screen.getByText("Random Thoughts"));
 
@@ -105,7 +127,7 @@ describe("CategoriesSidebar", () => {
   it("removes category param when clicking 'All Categories'", async () => {
     mockSearchParams = new URLSearchParams("category=1");
     const user = userEvent.setup();
-    render(<CategoriesSidebar />);
+    render(<CategoriesSidebar />, { wrapper: createWrapper() });
 
     await user.click(screen.getByText("All Categories"));
 
@@ -114,7 +136,7 @@ describe("CategoriesSidebar", () => {
 
   it("bolds the active category name", () => {
     mockSearchParams = new URLSearchParams("category=3");
-    render(<CategoriesSidebar />);
+    render(<CategoriesSidebar />, { wrapper: createWrapper() });
 
     const personal = screen.getByText("Personal");
     expect(personal.closest("button")?.querySelector(".font-bold") ?? personal).toHaveClass("font-bold");
@@ -125,21 +147,21 @@ describe("CategoriesSidebar", () => {
   });
 
   it("bolds 'All Categories' when no category param is set", () => {
-    render(<CategoriesSidebar />);
+    render(<CategoriesSidebar />, { wrapper: createWrapper() });
 
     expect(screen.getByText("All Categories")).toHaveClass("font-bold");
   });
 
   it("shows loading state", () => {
     mockUseCategories.mockReturnValue({ data: undefined, isLoading: true });
-    render(<CategoriesSidebar />);
+    render(<CategoriesSidebar />, { wrapper: createWrapper() });
 
     expect(screen.getByText("Loading…")).toBeInTheDocument();
     expect(screen.queryByText("All Categories")).not.toBeInTheDocument();
   });
 
   it("has accessible navigation landmark", () => {
-    render(<CategoriesSidebar />);
+    render(<CategoriesSidebar />, { wrapper: createWrapper() });
 
     expect(screen.getByRole("navigation", { name: "Categories" })).toBeInTheDocument();
   });
