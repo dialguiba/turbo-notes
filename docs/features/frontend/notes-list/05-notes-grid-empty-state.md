@@ -18,16 +18,16 @@ Establish the `useNotes` hook in `features/notes/hooks/`, `Note` and `NotePayloa
 
 ## Acceptance criteria
 
-- [ ] Notes fetched from `GET /api/notes/` via TanStack Query with key `["notes", { category }]`
-- [ ] Category filter from URL search params is passed as `?category=<id>` query param to the API
-- [ ] Cards display date, category name, title, and truncated content
-- [ ] Card background color matches category color via inline style
-- [ ] Grid is responsive: 1 column on mobile, 2 on tablet, 3 on desktop
-- [ ] Date formatting: "Today" / "Yesterday" / "Mar 19" — no year shown
-- [ ] Vitest tests for the date formatting utility (today, yesterday, older, midnight edge cases)
-- [ ] Clicking a card navigates to `/notes/[id]`
-- [ ] Empty state shows boba tea image + "I'm just here waiting for your charming notes..."
-- [ ] Stub editor page at `/notes/[id]` with note ID and back link
+- [x] Notes fetched from `GET /api/notes/` via TanStack Query with key `["notes", { category }]`
+- [x] Category filter from URL search params is passed as `?category=<id>` query param to the API
+- [x] Cards display date, category name, title, and truncated content
+- [x] Card background color matches category color via inline style
+- [x] Grid is responsive: 1 column on mobile, 2 on tablet, 3 on desktop
+- [x] Date formatting: "Today" / "Yesterday" / "Mar 19" — no year shown
+- [x] Vitest tests for the date formatting utility (today, yesterday, older, midnight edge cases)
+- [x] Clicking a card navigates to `/notes/[id]`
+- [x] Empty state shows boba tea image + "I'm just here waiting for your charming notes..."
+- [x] Stub editor page at `/notes/[id]` with note ID and back link
 
 ## Blocked by
 
