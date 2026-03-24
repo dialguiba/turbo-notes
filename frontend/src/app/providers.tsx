@@ -101,6 +101,9 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const logout = useCallback(() => {
+    // TODO: In production, call POST /api/auth/logout/ to blacklist the
+    // refresh token server-side (requires djangorestframework-simplejwt
+    // token_blacklist). Currently relies on short-lived access token TTL.
     clearTokens();
     setUser(null);
     window.location.href = "/login";

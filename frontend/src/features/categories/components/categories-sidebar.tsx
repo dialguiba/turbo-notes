@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Plus } from "lucide-react";
+import { LogOut, Plus } from "lucide-react";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useCategories } from "@/features/categories/hooks/use-categories";
@@ -10,6 +11,12 @@ import { CategoryDialog } from "@/features/categories/components/category-dialog
 import { CategoryContextMenu } from "@/features/categories/components/category-context-menu";
 import { DeleteCategoryDialog } from "@/features/categories/components/delete-category-dialog";
 import type { Category } from "@/features/categories/types";
+import { useAuth } from "@/app/providers";
+
+function getInitials(email: string): string {
+  const [local = "", domain = ""] = email.split("@");
+  return `${local[0] ?? ""}${domain[0] ?? ""}`.toUpperCase() || "?";
+}
 
 function CategoryItem({
   category,
@@ -53,6 +60,7 @@ function CategoryItem({
 export function CategoriesSidebar() {
   const { data: categories, isLoading } = useCategories();
   const { activeCategoryId, setCategory } = useCategoryFilter();
+  const { user, logout } = useAuth();
   const [createOpen, setCreateOpen] = useState(false);
   const [editingCategory, setEditingCategory] = useState<Category | null>(null);
   const [deletingCategory, setDeletingCategory] = useState<Category | null>(null);
@@ -108,6 +116,27 @@ export function CategoriesSidebar() {
           New Category
         </Button>
       </div>
+
+      {/* User footer */}
+      {user && (
+        <div className="flex items-center gap-2 border-t pt-3">
+          <Avatar size="sm">
+            <AvatarFallback>{getInitials(user.email)}</AvatarFallback>
+          </Avatar>
+          <span className="min-w-0 flex-1 truncate text-xs text-muted-foreground">
+            {user.email}
+          </span>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="size-8 shrink-0"
+            onClick={logout}
+            aria-label="Log out"
+          >
+            <LogOut className="size-4" />
+          </Button>
+        </div>
+      )}
 
       <CategoryDialog
         open={createOpen}

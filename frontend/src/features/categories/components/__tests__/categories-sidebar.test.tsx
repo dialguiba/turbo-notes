@@ -28,6 +28,13 @@ vi.mock("@/features/categories/hooks/use-create-category", () => ({
   }),
 }));
 
+const mockLogout = vi.fn();
+const mockUser = { id: 1, email: "diego@example.com" };
+
+vi.mock("@/app/providers", () => ({
+  useAuth: () => ({ user: mockUser, logout: mockLogout }),
+}));
+
 import { CategoriesSidebar } from "../categories-sidebar";
 import type { Category } from "@/features/categories/types";
 
@@ -164,5 +171,21 @@ describe("CategoriesSidebar", () => {
     render(<CategoriesSidebar />, { wrapper: createWrapper() });
 
     expect(screen.getByRole("navigation", { name: "Categories" })).toBeInTheDocument();
+  });
+
+  it("shows user avatar with initials and email in the footer", () => {
+    render(<CategoriesSidebar />, { wrapper: createWrapper() });
+
+    expect(screen.getByText("DE")).toBeInTheDocument(); // initials of "diego@example.com"
+    expect(screen.getByText("diego@example.com")).toBeInTheDocument();
+  });
+
+  it("calls logout when clicking the logout button", async () => {
+    const user = userEvent.setup();
+    render(<CategoriesSidebar />, { wrapper: createWrapper() });
+
+    await user.click(screen.getByRole("button", { name: /log out/i }));
+
+    expect(mockLogout).toHaveBeenCalledOnce();
   });
 });

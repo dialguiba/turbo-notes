@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ChevronDown, Settings } from "lucide-react";
+import { ChevronDown, LogOut, Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -14,6 +14,7 @@ import { useCategories } from "@/features/categories/hooks/use-categories";
 import { useCategoryFilter } from "@/features/categories/hooks/use-category-filter";
 import { CreateNoteButton } from "@/features/notes/components/create-note-button";
 import { MobileCategoryManager } from "@/features/categories/components/mobile-category-manager";
+import { useAuth } from "@/app/providers";
 import type { Note } from "@/features/notes/types";
 
 interface MobileTopBarProps {
@@ -23,6 +24,7 @@ interface MobileTopBarProps {
 export function MobileTopBar({ onNoteCreated }: MobileTopBarProps) {
   const { data: categories } = useCategories();
   const { activeCategoryId, setCategory } = useCategoryFilter();
+  const { logout } = useAuth();
   const [managerOpen, setManagerOpen] = useState(false);
 
   const activeCategory = categories?.find(
@@ -75,7 +77,18 @@ export function MobileTopBar({ onNoteCreated }: MobileTopBarProps) {
         </DropdownMenuContent>
       </DropdownMenu>
 
-      <CreateNoteButton onNoteCreated={onNoteCreated} />
+      <div className="flex items-center gap-1">
+        <CreateNoteButton onNoteCreated={onNoteCreated} />
+        <Button
+          variant="ghost"
+          size="icon"
+          className="size-8"
+          onClick={logout}
+          aria-label="Log out"
+        >
+          <LogOut className="size-4" />
+        </Button>
+      </div>
 
       <MobileCategoryManager
         open={managerOpen}
