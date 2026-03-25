@@ -1,5 +1,6 @@
 "use client";
 
+import { Trash2 } from "lucide-react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -8,6 +9,7 @@ import {
   AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
+  AlertDialogMedia,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 
@@ -26,21 +28,25 @@ export function DeleteNoteDialog({
 }: DeleteNoteDialogProps) {
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
-      <AlertDialogContent>
-        <AlertDialogHeader>
-          <AlertDialogTitle>Delete this note?</AlertDialogTitle>
+      <AlertDialogContent
+        size="sm"
+        className="bg-beige ring-warm-brown/15 gap-3"
+      >
+        <AlertDialogHeader className="gap-1">
+          <AlertDialogMedia className="bg-transparent">
+            <Trash2 className="text-title-brown size-5" />
+          </AlertDialogMedia>
+          <AlertDialogTitle className="font-heading text-title-brown">
+            Delete this note?
+          </AlertDialogTitle>
           <AlertDialogDescription>
             This can&apos;t be undone.
           </AlertDialogDescription>
         </AlertDialogHeader>
-        <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction
-            variant="destructive"
-            onClick={onConfirm}
-            disabled={isPending}
-          >
-            {isPending ? "Deleting..." : "Delete"}
+        <AlertDialogFooter className="border-warm-brown/10 bg-transparent">
+          <AlertDialogCancel variant="ghost">Cancel</AlertDialogCancel>
+          <AlertDialogAction onClick={onConfirm} disabled={isPending}>
+            {isPending ? "Deleting…" : "Delete"}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
