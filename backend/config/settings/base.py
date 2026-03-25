@@ -3,7 +3,7 @@ from pathlib import Path
 
 from decouple import config
 
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 SECRET_KEY = config("SECRET_KEY", default="django-insecure-changeme")
 
