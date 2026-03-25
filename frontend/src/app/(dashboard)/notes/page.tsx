@@ -19,7 +19,7 @@ export default function NotesPage() {
     <div className="flex min-h-full flex-1">
       {/* Desktop sidebar — hidden on mobile */}
       <Suspense>
-        <div className="hidden md:block">
+        <div className="hidden md:flex">
           <CategoriesSidebar />
         </div>
       </Suspense>
