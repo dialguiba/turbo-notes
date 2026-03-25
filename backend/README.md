@@ -72,27 +72,18 @@ python manage.py runserver         # http://localhost:8000
 
 ## API Endpoints
 
-### Auth (`/api/auth/`)
+Full API documentation is available at [`/api/docs/`](http://localhost:8000/api/docs/) (Swagger UI) once the server is running.
 
-| Method | Endpoint                   | Description              |
-| ------ | -------------------------- | ------------------------ |
-| POST   | `/api/auth/register/`      | Create a new account     |
-| POST   | `/api/auth/login/`         | Obtain JWT token pair    |
-| POST   | `/api/auth/token/refresh/` | Refresh access token     |
-| GET    | `/api/auth/me/`            | Get current user profile |
-
-### Docs
-
-| Endpoint       | Description             |
-| -------------- | ----------------------- |
-| `/api/docs/`   | Swagger UI              |
-| `/api/schema/` | OpenAPI 3 schema (JSON) |
-| `/admin/`      | Django admin panel      |
+| URL              | Description             |
+| ---------------- | ----------------------- |
+| `/api/docs/`     | Swagger UI              |
+| `/api/schema/`   | OpenAPI 3 schema (JSON) |
+| `/admin/`        | Django admin panel      |
 
 ## Key Design Decisions
 
 - **Email-based auth** — no username field; email is the login identifier
 - **Custom user model** (`apps.users.CustomUser`) — set up from day one to avoid migration headaches
-- **JWT tokens** — access token: 30 min, refresh token: 7 days
+- **JWT tokens** — access token: 15 min, refresh token: 7 days (rotated + blacklisted on each refresh)
 - **All API responses in JSON** — standard DRF serialization
 - **Thin views** — business logic goes in models or services, not views
