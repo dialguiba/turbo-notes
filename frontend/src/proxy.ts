@@ -16,7 +16,7 @@ function isAuthRoute(pathname: string): boolean {
   );
 }
 
-export function middleware(request: NextRequest): NextResponse {
+export function proxy(request: NextRequest): NextResponse {
   const { pathname } = request.nextUrl;
   const hasToken = request.cookies.has(AUTH_COOKIE_NAME);
 
