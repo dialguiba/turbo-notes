@@ -74,7 +74,7 @@ pnpm test:watch                     # Vitest watch mode
 - Route params and searchParams are async in Next.js 16 (must be awaited)
 - Route groups: `(auth)` for login/signup, `(dashboard)` for main app — separate layouts, no URL impact
 - Turbopack is the default bundler in Next.js 16
-- React Compiler is NOT enabled (opt-in, increases compile time)
+- React Compiler is enabled (`reactCompiler: true` in next.config.ts) — manual `useMemo`/`useCallback` is usually unnecessary
 
 # Project Structure
 
