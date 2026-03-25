@@ -224,12 +224,13 @@ class TestListNotes:
         response = auth_client.get(URL)
 
         assert response.status_code == 200
-        assert len(response.data) == 2
+        results = response.data["results"]
+        assert len(results) == 2
         # The one with a category should have nested object
-        with_cat = [n for n in response.data if n["title"] == "A"][0]
+        with_cat = [n for n in results if n["title"] == "A"][0]
         assert with_cat["category"]["id"] == category.pk
         # The one without should have null
-        without_cat = [n for n in response.data if n["title"] == "B"][0]
+        without_cat = [n for n in results if n["title"] == "B"][0]
         assert without_cat["category"] is None
 
     def test_list_ordered_by_updated_at_descending(self, auth_client, user):
@@ -238,7 +239,7 @@ class TestListNotes:
 
         response = auth_client.get(URL)
 
-        ids = [n["id"] for n in response.data]
+        ids = [n["id"] for n in response.data["results"]]
         # n2 was created after n1, so it should come first
         assert ids[0] == n2.pk
         assert ids[1] == n1.pk
@@ -249,7 +250,7 @@ class TestListNotes:
 
         response = auth_client.get(URL)
 
-        titles = [n["title"] for n in response.data]
+        titles = [n["title"] for n in response.data["results"]]
         assert "Mine" in titles
         assert "Theirs" not in titles
 
@@ -261,7 +262,7 @@ class TestListNotes:
         response = auth_client.get(URL, {"category": cat.pk})
 
         assert response.status_code == 200
-        titles = [n["title"] for n in response.data]
+        titles = [n["title"] for n in response.data["results"]]
         assert titles == ["In cat"]
 
     def test_filter_by_none_returns_uncategorized_notes(self, auth_client, user):
@@ -272,7 +273,7 @@ class TestListNotes:
         response = auth_client.get(URL, {"category": "none"})
 
         assert response.status_code == 200
-        titles = [n["title"] for n in response.data]
+        titles = [n["title"] for n in response.data["results"]]
         assert titles == ["No cat"]
 
     def test_filter_by_nonexistent_category_returns_400(self, auth_client):
@@ -294,3 +295,43 @@ class TestListNotes:
 
         assert response.status_code == 400
         assert "category" in response.data
+
+
+# ── Pagination ──────────────────────────────────
+
+
+@pytest.mark.django_db
+class TestNotePagination:
+    def test_response_shape_has_pagination_keys(self, auth_client, user):
+        Note.objects.create(user=user, title="One")
+
+        response = auth_client.get(URL)
+
+        assert response.status_code == 200
+        assert "results" in response.data
+        assert "next" in response.data
+        assert "previous" in response.data
+        assert len(response.data["results"]) == 1
+
+    def test_first_page_returns_at_most_page_size_notes(self, auth_client, user):
+        for i in range(25):
+            Note.objects.create(user=user, title=f"Note {i}")
+
+        response = auth_client.get(URL)
+
+        assert response.status_code == 200
+        assert len(response.data["results"]) == 20
+        assert response.data["next"] is not None
+
+    def test_cursor_navigation_returns_remaining_notes(self, auth_client, user):
+        for i in range(25):
+            Note.objects.create(user=user, title=f"Note {i}")
+
+        first_page = auth_client.get(URL)
+        next_url = first_page.data["next"]
+
+        second_page = auth_client.get(next_url)
+
+        assert second_page.status_code == 200
+        assert len(second_page.data["results"]) == 5
+        assert second_page.data["next"] is None

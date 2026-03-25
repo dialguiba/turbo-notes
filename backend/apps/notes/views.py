@@ -1,10 +1,16 @@
 from django.db.models import Count
 from rest_framework.exceptions import ValidationError
+from rest_framework.pagination import CursorPagination
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 
 from apps.notes.models import Category
 from apps.notes.serializers import CategorySerializer, NoteSerializer
+
+
+class NotePagination(CursorPagination):
+    page_size = 20
+    ordering = "-updated_at"
 
 
 class CategoryViewSet(ModelViewSet):
@@ -30,6 +36,7 @@ class CategoryViewSet(ModelViewSet):
 class NoteViewSet(ModelViewSet):
     serializer_class = NoteSerializer
     permission_classes = [IsAuthenticated]
+    pagination_class = NotePagination
 
     def get_queryset(self):
         qs = self.request.user.notes.select_related("category")
