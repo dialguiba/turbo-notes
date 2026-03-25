@@ -3,11 +3,7 @@
 import { useRef, useState } from "react";
 import { Trash2, X } from "lucide-react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import {
-  Dialog,
-  DialogContent,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { useNote } from "@/features/notes/hooks/use-note";
 import { useAutoSave } from "@/features/notes/hooks/use-auto-save";
@@ -43,8 +39,7 @@ export function NoteEditor({ noteId, onClose }: NoteEditorProps) {
     >
       <DialogContent
         showCloseButton={false}
-        className="fixed! inset-0! top-0! left-0! w-screen! h-screen! max-w-none! translate-x-0! translate-y-0! rounded-none! p-0! ring-0! flex flex-col"
-        style={{ backgroundColor: note?.category?.color ?? undefined }}
+        className="bg-beige! fixed! inset-0! top-0! left-0! flex h-screen! w-screen! max-w-none! translate-x-0! translate-y-0! flex-col rounded-none! p-0! ring-0!"
       >
         {/* Accessible title — visually hidden */}
         <DialogTitle className="sr-only">
@@ -124,34 +119,31 @@ function EditorContent({ note, onClose }: { note: Note; onClose: () => void }) {
   }
 
   return (
-    <div
-      className="flex flex-1 flex-col"
-      style={{ backgroundColor: category?.color ?? undefined }}
-    >
+    <div className="flex flex-1 flex-col gap-6 px-8 py-8">
       {/* Top bar */}
-      <div className="flex items-center justify-between p-4">
-        <CategoryDropdown
-          current={category}
-          onSelect={handleCategoryChange}
-        />
+      <div className="flex items-center justify-between">
+        <CategoryDropdown current={category} onSelect={handleCategoryChange} />
         <div className="flex items-center gap-1">
           <Button
             variant="ghost"
             size="icon-sm"
             onClick={() => setDeleteOpen(true)}
           >
-            <Trash2 className="size-4" />
+            <Trash2 className="size-6" strokeWidth={1.5} />
             <span className="sr-only">Delete note</span>
           </Button>
           <Button variant="ghost" size="icon-sm" onClick={handleClose}>
-            <X className="size-5" />
+            <X className="size-8" strokeWidth={1.5} />
             <span className="sr-only">Close</span>
           </Button>
         </div>
       </div>
 
-      {/* Content area */}
-      <div className="flex flex-1 flex-col overflow-hidden px-6 pb-6">
+      {/* Note area — colored by category */}
+      <div
+        className="flex flex-1 flex-col overflow-hidden rounded-2xl px-10 py-8"
+        style={{ backgroundColor: category?.color ?? undefined }}
+      >
         {/* Timestamp */}
         <p className="mb-4 text-right text-xs opacity-60">
           {formatEditorDate(lastEdited)}
@@ -232,9 +224,7 @@ function EditorNotFound({ onClose }: { onClose: () => void }) {
       </div>
       <div className="flex flex-1 flex-col items-center justify-center gap-2">
         <p className="text-lg font-medium">Note not found</p>
-        <p className="text-sm opacity-60">
-          This note may have been deleted.
-        </p>
+        <p className="text-sm opacity-60">This note may have been deleted.</p>
       </div>
     </>
   );

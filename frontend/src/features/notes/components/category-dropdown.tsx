@@ -32,7 +32,10 @@ export function CategoryDropdown({ current, onSelect }: CategoryDropdownProps) {
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger
         render={
-          <Button variant="ghost" size="sm" className="gap-2">
+          <Button
+            variant="ghost"
+            className="border-warm-brown/30 h-10 gap-2 rounded-[6px] border px-3 text-sm"
+          >
             <span
               aria-hidden="true"
               className="size-3 shrink-0 rounded-full"
@@ -41,7 +44,7 @@ export function CategoryDropdown({ current, onSelect }: CategoryDropdownProps) {
               }}
             />
             {current?.name ?? "No Category"}
-            <ChevronDown className="size-3.5 opacity-50" />
+            <ChevronDown className="size-6 opacity-50" />
           </Button>
         }
       />
