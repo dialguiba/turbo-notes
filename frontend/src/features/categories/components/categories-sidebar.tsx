@@ -5,6 +5,7 @@ import { LogOut, Plus } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Skeleton } from "@/components/ui/skeleton";
 import { useCategories } from "@/features/categories/hooks/use-categories";
 import { useCategoryFilter } from "@/features/categories/hooks/use-category-filter";
 import { CategoryDialog } from "@/features/categories/components/category-dialog";
@@ -57,6 +58,34 @@ function CategoryItem({
   );
 }
 
+export function CategoriesSidebarSkeleton() {
+  return (
+    <nav
+      className="flex h-full w-56 shrink-0 flex-col px-4 py-4"
+      aria-label="Categories"
+    >
+      <div className="flex-1 space-y-1">
+        {/* "All Categories" placeholder */}
+        <div className="px-3 py-2">
+          <Skeleton className="h-4 w-24" />
+        </div>
+        {/* Category item placeholders */}
+        {Array.from({ length: 4 }).map((_, i) => (
+          <div key={i} className="flex items-center gap-3 px-3 py-2">
+            <Skeleton className="size-3 rounded-full" />
+            <Skeleton className="h-4 flex-1" />
+          </div>
+        ))}
+      </div>
+      {/* User footer placeholder */}
+      <div className="mt-auto flex items-center gap-2 border-t pt-3">
+        <Skeleton className="size-7 rounded-full" />
+        <Skeleton className="h-3 flex-1" />
+      </div>
+    </nav>
+  );
+}
+
 export function CategoriesSidebar() {
   const { data: categories, isLoading } = useCategories();
   const { activeCategoryId, setCategory } = useCategoryFilter();
@@ -68,14 +97,7 @@ export function CategoriesSidebar() {
   );
 
   if (isLoading) {
-    return (
-      <nav
-        className="w-56 shrink-0 space-y-1 py-4 pr-4"
-        aria-label="Categories"
-      >
-        <div className="text-muted-foreground px-3 py-2 text-sm">Loading…</div>
-      </nav>
-    );
+    return <CategoriesSidebarSkeleton />;
   }
 
   return (
