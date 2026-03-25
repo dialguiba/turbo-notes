@@ -45,15 +45,18 @@ pnpm dev                           # http://localhost:3000
 turbo-ai/
 ├── backend/
 │   ├── apps/
-│   │   ├── users/          # Custom user model, email-based JWT auth
-│   │   └── notes/          # Notes and categories CRUD
-│   └── config/             # Django settings, urls, wsgi
+│   │   ├── users/          # Custom user model, JWT auth, services
+│   │   └── notes/          # Notes and categories CRUD, signals
+│   └── config/
+│       └── settings/       # Split settings: base, local, production
 ├── frontend/
 │   └── src/
 │       ├── app/            # Next.js routes — (auth) and (dashboard) groups
-│       ├── components/ui/  # shadcn components
+│       ├── components/
+│       │   ├── ui/         # shadcn primitives
+│       │   └── core/       # Shared composed components (password-input)
 │       ├── features/       # auth, notes, categories — colocated components/hooks/types
-│       └── lib/            # API client, utilities
+│       └── lib/            # API client, auth constants, utilities
 └── docs/                   # Product specs, PRDs, feature tasks
 ```
 
@@ -86,42 +89,41 @@ turbo-ai/
 
 ## AI-Assisted Development
 
-This project was built using AI as a development accelerator, with every decision reviewed and directed by me. Here is the workflow:
+I used AI throughout this project to move faster, but I made all the design and architecture calls myself. Here's how the workflow looked:
 
 ### 1. Requirements Gathering
 
-Started from the resources provided by Turbo AI (Figma designs, walkthrough video, and the brief) to build a structured product spec (`docs/product-specs.md`) as the single source of truth.
+I took the Figma designs, walkthrough video, and brief from Turbo AI and turned them into a product spec (`docs/product-specs.md`) that I used as the source of truth for everything else.
 
 ### 2. Roadmap Planning
 
-Created sequential roadmaps for both backend (`docs/features/backend/roadmap.md`) and frontend (`docs/features/frontend/roadmap.md`). These define the order of implementation and identify which tasks can run in parallel — useful both for team workflows and for leveraging AI agents effectively.
+I wrote roadmaps for backend (`docs/features/backend/roadmap.md`) and frontend (`docs/features/frontend/roadmap.md`) to define the build order and figure out which tasks could run in parallel.
 
 ### 3. PRD Generation (per feature)
 
-For each feature, followed a three-step process:
+For each feature I followed three steps:
 
-1. **Interview skill** — answered a series of targeted questions to fill in gaps and think through edge cases before writing any code
-2. **PRD skill** — generated a detailed PRD from the gathered context, then reviewed and refined it manually
-3. **Issue breakdown skill** — split each PRD into vertical slices with acceptance criteria, enabling parallel and structured implementation
+1. **Interview skill** — I answered targeted questions to think through edge cases before writing any code
+2. **PRD skill** — generated a PRD from that context, then I reviewed and adjusted it
+3. **Issue breakdown skill** — split each PRD into vertical slices with acceptance criteria so I could implement them one by one
 
 ### 4. Implementation
 
-- **Backend:** strict TDD — tests written first, then implementation to make them pass
-- **Frontend:** functional approach — implemented features end-to-end, then validated against acceptance criteria
+- **Backend:** strict TDD — tests first, then the code to make them pass
+- **Frontend:** built features end-to-end, then checked them against the acceptance criteria
 
-All implementation decisions (data model choices, UI patterns, tradeoffs) were made by me; AI handled the code generation under my direction.
+I also used a **TDD skill** that enforced a red-green-refactor loop: write one failing test, write just enough code to pass it, refactor, repeat. This gave me a clear implementation order and helped catch bugs early instead of after the fact.
 
 ### 5. Review & Commits
 
-After each iteration:
+After each piece of work:
 
-- Manual code review of all changes
-- Used a **commit planning skill** to group changes into granular, well-described commits
-- Periodic automated code reviews via specialized skills (including an official Next.js best practices review) to catch issues I might have missed
+- I reviewed all the code changes myself
+- Used a **commit planning skill** to split changes into small, well-described commits
+- Ran automated code reviews (including a Next.js best practices check) to catch things I might have missed
 
 ## Future Improvements
 
 - Migrate JWT storage from localStorage to HTTP-only cookies with CSRF protection to reduce XSS attack surface
 - Add PostgreSQL support for production deployment
-- Implement voice-to-text note input
 - Add real-time collaborative editing

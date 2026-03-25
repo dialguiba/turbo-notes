@@ -8,7 +8,7 @@ Next.js 16 application for a note-taking app with categories, auto-save, and voi
 - **Package manager:** pnpm
 - **Framework:** Next.js 16.x (App Router) + React 19 + TypeScript (strict)
 - **Bundler:** Turbopack (Next.js 16 default)
-- **UI Library:** shadcn/ui (New York style)
+- **UI Library:** shadcn/ui (base-nova style)
 - **Styling:** Tailwind CSS v4 (CSS-based config in `globals.css`)
 - **Server state:** TanStack Query
 - **Icons:** lucide-react
@@ -25,17 +25,19 @@ frontend/src/
 │   ├── globals.css          # Tailwind v4 config + custom theme tokens
 │   ├── layout.tsx           # Root layout
 │   ├── providers.tsx        # Client providers (TanStack Query, etc.)
-│   └── page.tsx             # Landing page
+│   ├── page.tsx             # Landing page
+│   ├── not-found.tsx        # 404 page
+│   └── global-error.tsx     # Error boundary fallback
 ├── components/
-│   ├── ui/                  # shadcn components
-│   └── illustrations/       # SVG illustrations
+│   ├── ui/                  # shadcn primitives
+│   └── core/                # Shared composed components (password-input)
 ├── features/
 │   ├── auth/                # Auth feature module
-│   ├── notes/               # Notes feature module
+│   ├── notes/               # Notes feature module (includes date formatters, cursor helpers)
 │   └── categories/          # Categories feature module
 ├── lib/
 │   ├── api-client.ts        # Centralized API client (all fetch calls go here)
-│   ├── mock-data.ts         # Mock data (auth screens only)
+│   ├── auth-constants.ts    # Auth route/storage constants
 │   └── utils.ts             # Shared utilities (cn, etc.)
 ```
 
