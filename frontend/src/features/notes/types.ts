@@ -18,3 +18,9 @@ export interface NotePayload {
   content?: string;
   category?: number | null;
 }
+
+export interface PaginatedResponse<T> {
+  next: string | null;
+  previous: string | null;
+  results: T[];
+}
