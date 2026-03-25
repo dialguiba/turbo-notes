@@ -30,7 +30,7 @@ export default function RootLayout({
       lang="en"
       className={`${inter.variable} ${inriaSerif.variable} h-full antialiased`}
     >
-      <body className="flex min-h-full flex-col">
+      <body className="bg-beige flex min-h-full flex-col">
         <Providers>{children}</Providers>
       </body>
     </html>

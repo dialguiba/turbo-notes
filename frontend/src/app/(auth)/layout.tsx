@@ -6,7 +6,7 @@ export default function AuthLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="bg-beige flex flex-1 items-center justify-center px-4 py-8">
+    <div className="flex flex-1 items-center justify-center px-4 py-8">
       <AuthPageTransition>{children}</AuthPageTransition>
     </div>
   );
