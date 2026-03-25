@@ -6,7 +6,6 @@ import "./globals.css";
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
-  weight: ["400", "700"],
 });
 
 const inriaSerif = Inria_Serif({

@@ -1,5 +1,7 @@
 // Typed API client — all API calls go through here.
 // Handles auth headers, token refresh on 401, and redirect on session expiry.
+// WARNING: This module uses browser-only APIs (localStorage, document.cookie).
+// Only import from 'use client' components.
 
 import { AUTH_COOKIE_NAME } from "@/lib/auth-constants";
 
