@@ -14,6 +14,7 @@ import { insertAtCursor } from "@/features/notes/insert-at-cursor";
 interface VoiceButtonProps {
   content: string;
   cursorPosition: number;
+  textareaRef: React.RefObject<HTMLTextAreaElement | null>;
   onContentChange: (newContent: string) => void;
   onFlush: () => void;
 }
@@ -30,6 +31,7 @@ function getLanguageBadge(): string {
 export function VoiceButton({
   content,
   cursorPosition,
+  textareaRef,
   onContentChange,
   onFlush,
 }: VoiceButtonProps) {
@@ -54,21 +56,32 @@ export function VoiceButton({
       cursorRef.current = newCursorPos;
       contentRef.current = newContent;
       onContentChange(newContent);
+
+      // Keep the textarea cursor in sync so the user sees the insertion point
+      const ta = textareaRef.current;
+      if (ta) {
+        requestAnimationFrame(() => {
+          ta.focus();
+          ta.setSelectionRange(newCursorPos, newCursorPos);
+        });
+      }
     },
-    [onContentChange],
+    [onContentChange, textareaRef],
   );
 
   const { isListening, isSupported, error, start, stop } =
     useSpeechRecognition({ onTranscript: handleTranscript });
 
   const waveform = useWaveform();
+  const stopWaveform = waveform.stop;
 
-  // Show toast on error from speech recognition
+  // On speech recognition error: show toast and release the microphone
   useEffect(() => {
     if (error) {
       toast.error(error);
+      stopWaveform();
     }
-  }, [error]);
+  }, [error, stopWaveform]);
 
   async function handleStart() {
     if (!isSupported) {
@@ -77,6 +90,13 @@ export function VoiceButton({
     }
     await waveform.start();
     start();
+
+    // Restore focus + cursor so the user sees where dictated text will land
+    const ta = textareaRef.current;
+    if (ta) {
+      ta.focus();
+      ta.setSelectionRange(cursorRef.current, cursorRef.current);
+    }
   }
 
   function handleStop() {
@@ -120,9 +140,9 @@ export function VoiceButton({
   // --- Floating button (idle) ---
   return (
     <Button
-      variant="ghost"
+      variant={null}
       size="icon"
-      className="absolute right-4 bottom-4 size-10 rounded-full bg-foreground/60 text-background shadow-lg hover:bg-foreground/80"
+      className="absolute right-4 bottom-4 size-10 rounded-full bg-black text-white shadow-lg hover:bg-black/80"
       onClick={handleStart}
       aria-label="Voice to text"
     >

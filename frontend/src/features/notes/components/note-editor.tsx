@@ -142,7 +142,12 @@ function EditorContent({ note, onClose }: { note: Note; onClose: () => void }) {
       {/* Note area — colored by category */}
       <div
         className="flex flex-1 flex-col overflow-hidden rounded-2xl px-10 py-8"
-        style={{ backgroundColor: category?.color ?? undefined }}
+        style={{
+          backgroundColor: category?.color ?? undefined,
+          border: category?.color
+            ? `3px solid color-mix(in hsl, ${category.color}, oklch(0.58 0.2 none))`
+            : undefined,
+        }}
       >
         {/* Timestamp */}
         <p className="mb-4 text-right text-xs opacity-60">
@@ -177,6 +182,7 @@ function EditorContent({ note, onClose }: { note: Note; onClose: () => void }) {
           <VoiceButton
             content={content}
             cursorPosition={cursorPosition}
+            textareaRef={textareaRef}
             onContentChange={handleContentChange}
             onFlush={autoSave.flush}
           />
