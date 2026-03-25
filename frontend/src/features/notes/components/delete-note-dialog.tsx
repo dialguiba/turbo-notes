@@ -28,22 +28,19 @@ export function DeleteNoteDialog({
 }: DeleteNoteDialogProps) {
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
-      <AlertDialogContent
-        size="sm"
-        className="bg-beige ring-warm-brown/15 gap-3"
-      >
+      <AlertDialogContent size="sm">
         <AlertDialogHeader className="gap-1">
-          <AlertDialogMedia className="bg-transparent">
+          <AlertDialogMedia>
             <Trash2 className="text-title-brown size-5" />
           </AlertDialogMedia>
-          <AlertDialogTitle className="font-heading text-title-brown">
+          <AlertDialogTitle>
             Delete this note?
           </AlertDialogTitle>
           <AlertDialogDescription>
             This can&apos;t be undone.
           </AlertDialogDescription>
         </AlertDialogHeader>
-        <AlertDialogFooter className="border-warm-brown/10 bg-transparent">
+        <AlertDialogFooter>
           <AlertDialogCancel variant="ghost">Cancel</AlertDialogCancel>
           <AlertDialogAction onClick={onConfirm} disabled={isPending}>
             {isPending ? "Deleting…" : "Delete"}
