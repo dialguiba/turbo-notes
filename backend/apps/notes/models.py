@@ -38,7 +38,7 @@ class Note(models.Model):
         related_name="notes",
     )
     title = models.CharField(max_length=255, blank=True, default="")
-    content = models.TextField(blank=True, default="")
+    content = models.TextField(blank=True, default="", max_length=300_000)
     category = models.ForeignKey(
         Category,
         on_delete=models.SET_NULL,
