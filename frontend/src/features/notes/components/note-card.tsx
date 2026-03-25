@@ -1,10 +1,8 @@
 "use client";
 
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { formatNoteDate } from "@/features/notes/format-note-date";
 import type { Note } from "@/features/notes/types";
-
-const CONTENT_PREVIEW_LENGTH = 120;
 
 interface NoteCardProps {
   note: Note;
@@ -12,31 +10,31 @@ interface NoteCardProps {
 }
 
 export function NoteCard({ note, onSelect }: NoteCardProps) {
-  const truncatedContent =
-    note.content.length > CONTENT_PREVIEW_LENGTH
-      ? note.content.slice(0, CONTENT_PREVIEW_LENGTH) + "..."
-      : note.content;
-
   return (
     <Card
-      className="h-full cursor-pointer transition-shadow hover:shadow-md"
+      className="flex h-52 cursor-pointer flex-col overflow-hidden ring-0 transition-shadow hover:shadow-md"
       style={{
         backgroundColor: note.category?.color ?? undefined,
+        border: note.category?.color
+          ? `3px solid color-mix(in hsl, ${note.category.color}, oklch(0.58 0.2 none))`
+          : undefined,
       }}
       onClick={() => onSelect(note.id)}
     >
       <CardHeader className="gap-0.5">
-        <div className="flex items-center justify-between text-xs opacity-70">
-          <span>{formatNoteDate(note.updated_at)}</span>
+        <div className="flex items-center gap-2 text-xs">
+          <span className="font-bold text-black">
+            {formatNoteDate(note.updated_at)}
+          </span>
           {note.category && <span>{note.category.name}</span>}
         </div>
-        <h3 className="line-clamp-1 font-semibold">
-          {note.title || "Untitled"}
-        </h3>
       </CardHeader>
-      <CardContent>
-        <p className="text-sm leading-relaxed opacity-80">
-          {truncatedContent || "No content yet"}
+      <CardContent className="flex flex-col gap-2">
+        <CardTitle className="line-clamp-1">
+          {note.title || "Untitled"}
+        </CardTitle>
+        <p className="line-clamp-3 text-sm leading-relaxed opacity-80">
+          {note.content || "No content yet"}
         </p>
       </CardContent>
     </Card>

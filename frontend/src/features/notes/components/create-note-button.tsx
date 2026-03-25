@@ -23,7 +23,8 @@ export function CreateNoteButton({ onNoteCreated }: CreateNoteButtonProps) {
     <Button
       onClick={() => createNote.mutate({ category: categoryId })}
       disabled={createNote.isPending}
-      size="sm"
+      variant="outline"
+      size="lg"
     >
       <Plus className="mr-1 size-4" />
       New Note

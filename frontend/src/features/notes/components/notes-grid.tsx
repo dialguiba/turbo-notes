@@ -24,7 +24,7 @@ export function NotesGrid({ onSelectNote }: NotesGridProps) {
   }
 
   return (
-    <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+    <div className="grid grid-cols-[repeat(auto-fill,minmax(260px,1fr))] gap-4">
       {notes.map((note) => (
         <NoteCard key={note.id} note={note} onSelect={onSelectNote} />
       ))}
