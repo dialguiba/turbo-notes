@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { useAuth } from "@/app/providers";
-import Link from "next/link";
+import { Link } from "@/components/ui/link";
 import { PasswordInput } from "@/components/core";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -73,7 +73,7 @@ export function SignupForm() {
             onChange={(e) => setPassword(e.target.value)}
             required
           />
-          <p className={`text-xs ${error ? "text-red-600" : "text-muted-foreground"}`}>
+          <p className={`text-xs ${error ? "text-destructive" : "text-muted-foreground"}`}>
             {error || "Minimum 8 characters"}
           </p>
         </div>
@@ -81,14 +81,15 @@ export function SignupForm() {
         <Button
           type="submit"
           variant="outline"
-          className="w-full"
+          className="mt-4 w-full"
           disabled={isSubmitting}
+          size="xl"
         >
           {isSubmitting ? "Signing up..." : "Sign Up"}
         </Button>
       </form>
 
-      <Link href="/login" className="text-xs underline">We&apos;re already friends!</Link>
+      <Link href="/login" className="text-xs">We&apos;re already friends!</Link>
     </div>
   );
 }

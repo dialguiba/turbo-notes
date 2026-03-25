@@ -4,7 +4,7 @@ import { SubmitEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { useAuth } from "@/app/providers";
-import Link from "next/link";
+import { Link } from "@/components/ui/link";
 import { PasswordInput } from "@/components/core";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -75,14 +75,17 @@ export function LoginForm() {
         <Button
           type="submit"
           variant="outline"
-          className="w-full"
+          className="mt-4 w-full"
           disabled={isSubmitting}
+          size="xl"
         >
           {isSubmitting ? "Logging in..." : "Login"}
         </Button>
       </form>
 
-      <Link href="/signup" className="text-xs underline">Oops! I&apos;ve never been here before</Link>
+      <Link href="/signup" className="text-xs">
+        Oops! I&apos;ve never been here before
+      </Link>
     </div>
   );
 }
