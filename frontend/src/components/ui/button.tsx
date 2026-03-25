@@ -37,7 +37,7 @@ const buttonVariants = cva(
           "aria-expanded:bg-secondary aria-expanded:text-secondary-foreground",
         ],
         ghost: [
-          "hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground",
+          "text-warm-brown hover:bg-muted hover:text-warm-brown aria-expanded:bg-muted aria-expanded:text-warm-brown",
           "dark:hover:bg-muted/50",
         ],
         destructive: [
