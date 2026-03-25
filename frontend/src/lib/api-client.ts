@@ -18,7 +18,7 @@ export function getAccessToken(): string | null {
   return localStorage.getItem(ACCESS_TOKEN_KEY);
 }
 
-function getRefreshToken(): string | null {
+export function getRefreshToken(): string | null {
   return localStorage.getItem(REFRESH_TOKEN_KEY);
 }
 
@@ -72,10 +72,11 @@ async function refreshAccessToken(): Promise<string> {
     throw new Error("Refresh failed");
   }
 
-  const data = (await res.json()) as { access: string };
+  const data = (await res.json()) as { access: string; refresh?: string };
   localStorage.setItem(ACCESS_TOKEN_KEY, data.access);
-  // Note: only access token is rotated — the refresh token stays valid
-  // until it expires (7 days per backend SIMPLE_JWT config).
+  if (data.refresh) {
+    localStorage.setItem(REFRESH_TOKEN_KEY, data.refresh);
+  }
   return data.access;
 }
 
@@ -96,6 +97,7 @@ const AUTH_PATHS = [
   "/api/auth/login/",
   "/api/auth/signup/",
   "/api/auth/refresh/",
+  "/api/auth/logout/",
 ];
 
 function isAuthPath(path: string): boolean {

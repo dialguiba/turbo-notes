@@ -8,14 +8,14 @@ The `useAuth().logout()` function already exists (clears tokens, resets state, r
 
 ## Design Decisions
 
-| Decision          | Resolution                                                                 |
-| ----------------- | -------------------------------------------------------------------------- |
-| **Where**         | Sidebar footer (desktop) + top bar icon (mobile)                           |
-| **User info**     | Avatar with initials + email                                               |
-| **Interaction**   | Direct button — no dropdown menu (YAGNI, single action)                    |
-| **Confirmation**  | None — logout is not destructive (notes are auto-saved)                    |
-| **Backend**       | No endpoint — client-side only. TODO comment for future token revocation   |
-| **Mobile**        | LogOut icon in the right side of `mobile-top-bar`                          |
+| Decision         | Resolution                                                                                |
+| ---------------- | ----------------------------------------------------------------------------------------- |
+| **Where**        | Sidebar footer (desktop) + top bar icon (mobile)                                          |
+| **User info**    | Avatar with initials + email                                                              |
+| **Interaction**  | Direct button — no dropdown menu (YAGNI, single action)                                   |
+| **Confirmation** | None — logout is not destructive (notes are auto-saved)                                   |
+| **Backend**      | `POST /api/auth/logout/` blacklists the refresh token (simplejwt `TokenBlacklistView`)    |
+| **Mobile**       | LogOut icon in the right side of `mobile-top-bar`                                         |
 
 ## Scope
 
@@ -23,11 +23,10 @@ The `useAuth().logout()` function already exists (clears tokens, resets state, r
 
 1. **`features/categories/components/categories-sidebar.tsx`** — add footer with avatar (initials) + email + logout button
 2. **`features/notes/components/mobile-top-bar.tsx`** — add LogOut icon to the right
-3. **`app/providers.tsx`** — add TODO comment about server-side token revocation
+3. **`app/providers.tsx`** — call `POST /api/auth/logout/` (fire-and-forget) before clearing tokens
 
 ### Out of scope
 
-- Backend logout endpoint / token blacklist (documented as TODO for production)
 - Dropdown menu / user settings menu
 - Confirmation dialog
 
@@ -36,4 +35,5 @@ The `useAuth().logout()` function already exists (clears tokens, resets state, r
 - [x] Desktop: sidebar shows user avatar (initials) + email + logout button at the bottom
 - [x] Mobile: top bar shows a LogOut icon
 - [x] Clicking logout clears tokens, resets auth state, and redirects to `/login`
-- [x] TODO comment in logout function documents future token revocation extensibility
+- [x] Backend: `POST /api/auth/logout/` blacklists the refresh token server-side
+- [x] Frontend: logout calls backend endpoint (fire-and-forget) before clearing local state

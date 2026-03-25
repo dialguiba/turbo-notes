@@ -14,6 +14,7 @@ import {
   ApiError,
   clearTokens,
   getAccessToken,
+  getRefreshToken,
   setTokens,
 } from "@/lib/api-client";
 import type { User } from "@/features/auth/types";
@@ -110,9 +111,12 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const logout = useCallback(() => {
-    // TODO: In production, call POST /api/auth/logout/ to blacklist the
-    // refresh token server-side (requires djangorestframework-simplejwt
-    // token_blacklist). Currently relies on short-lived access token TTL.
+    const refresh = getRefreshToken();
+    if (refresh) {
+      // Fire-and-forget: blacklist the refresh token server-side.
+      // We don't await — the UI should respond instantly regardless.
+      apiClient.post("/api/auth/logout/", { refresh }).catch(() => {});
+    }
     clearTokens();
     setUser(null);
     window.location.href = "/login";

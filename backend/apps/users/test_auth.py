@@ -96,16 +96,68 @@ class TestTokenRefresh:
     login_url = "/api/auth/login/"
     refresh_url = "/api/auth/refresh/"
 
-    def test_refresh_returns_new_access_token(self, api_client, existing_user):
-        # First, login to get a refresh token
+    def test_refresh_returns_new_access_and_refresh_token(
+        self, api_client, existing_user
+    ):
         login_response = api_client.post(
             self.login_url,
             {"email": existing_user.email, "password": "testpass123"},
         )
         refresh_token = login_response.data["refresh"]
 
-        # Then, use the refresh token to get a new access token
         response = api_client.post(self.refresh_url, {"refresh": refresh_token})
 
         assert response.status_code == 200
         assert "access" in response.data
+        assert "refresh" in response.data
+        assert response.data["refresh"] != refresh_token
+
+    def test_used_refresh_token_is_blacklisted(self, api_client, existing_user):
+        login_response = api_client.post(
+            self.login_url,
+            {"email": existing_user.email, "password": "testpass123"},
+        )
+        old_refresh = login_response.data["refresh"]
+
+        # Use the refresh token once — it gets rotated and blacklisted
+        api_client.post(self.refresh_url, {"refresh": old_refresh})
+
+        # Try reusing the old refresh token — should be rejected
+        response = api_client.post(self.refresh_url, {"refresh": old_refresh})
+
+        assert response.status_code == 401
+
+
+# ── Logout ───────────────────────────────────────
+
+
+@pytest.mark.django_db
+class TestLogout:
+    login_url = "/api/auth/login/"
+    logout_url = "/api/auth/logout/"
+    refresh_url = "/api/auth/refresh/"
+
+    def test_logout_blacklists_refresh_token(self, api_client, existing_user):
+        login_response = api_client.post(
+            self.login_url,
+            {"email": existing_user.email, "password": "testpass123"},
+        )
+        refresh_token = login_response.data["refresh"]
+
+        response = api_client.post(self.logout_url, {"refresh": refresh_token})
+
+        assert response.status_code == 200
+
+        # The refresh token should no longer work
+        refresh_response = api_client.post(self.refresh_url, {"refresh": refresh_token})
+        assert refresh_response.status_code == 401
+
+    def test_logout_with_invalid_token_returns_401(self, api_client):
+        response = api_client.post(self.logout_url, {"refresh": "not-a-real-token"})
+
+        assert response.status_code == 401
+
+    def test_logout_without_refresh_token_returns_400(self, api_client):
+        response = api_client.post(self.logout_url, {})
+
+        assert response.status_code == 400

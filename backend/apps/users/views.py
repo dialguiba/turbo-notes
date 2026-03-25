@@ -2,13 +2,19 @@ from drf_spectacular.utils import OpenApiResponse, extend_schema, inline_seriali
 from rest_framework import serializers, status
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
+from rest_framework.throttling import AnonRateThrottle
 from rest_framework.views import APIView
 
 from apps.users.serializers import SignUpSerializer
 
 
+class AuthAnonThrottle(AnonRateThrottle):
+    scope = "auth"
+
+
 class SignUpView(APIView):
     permission_classes = [AllowAny]
+    throttle_classes = [AuthAnonThrottle]
 
     @extend_schema(
         request=SignUpSerializer,
