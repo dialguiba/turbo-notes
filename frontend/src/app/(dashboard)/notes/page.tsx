@@ -16,7 +16,7 @@ export default function NotesPage() {
   }
 
   return (
-    <div className="flex min-h-full flex-1">
+    <div className="flex h-full flex-1">
       {/* Desktop sidebar — hidden on mobile */}
       <Suspense>
         <div className="hidden md:flex">
@@ -24,7 +24,7 @@ export default function NotesPage() {
         </div>
       </Suspense>
 
-      <main className="flex flex-1 flex-col p-6">
+      <main className="flex min-h-0 flex-1 flex-col p-6">
         {/* Mobile top bar — hidden on desktop */}
         <Suspense>
           <MobileTopBar onNoteCreated={handleNoteCreated} />
@@ -40,9 +40,11 @@ export default function NotesPage() {
           </div>
         </div>
 
-        <Suspense>
-          <NotesGrid onSelectNote={setSelectedNoteId} />
-        </Suspense>
+        <div className="min-h-0 flex-1 overflow-y-auto">
+          <Suspense>
+            <NotesGrid onSelectNote={setSelectedNoteId} />
+          </Suspense>
+        </div>
       </main>
 
       <NoteEditor
