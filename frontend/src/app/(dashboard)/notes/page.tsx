@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useState } from "react";
+import { Suspense, useRef, useState } from "react";
 import { CategoriesSidebar } from "@/features/categories/components/categories-sidebar";
 import { CreateNoteButton } from "@/features/notes/components/create-note-button";
 import { MobileTopBar } from "@/features/notes/components/mobile-top-bar";
@@ -10,9 +10,20 @@ import type { Note } from "@/features/notes/types";
 
 export default function NotesPage() {
   const [selectedNoteId, setSelectedNoteId] = useState<number | null>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  function scrollToTop() {
+    scrollRef.current?.scrollTo({ top: 0 });
+  }
 
   function handleNoteCreated(note: Note) {
+    scrollToTop();
     setSelectedNoteId(note.id);
+  }
+
+  function handleEditorClose() {
+    scrollToTop();
+    setSelectedNoteId(null);
   }
 
   return (
@@ -40,7 +51,7 @@ export default function NotesPage() {
           </div>
         </div>
 
-        <div className="min-h-0 flex-1 overflow-y-auto">
+        <div ref={scrollRef} className="min-h-0 flex-1 overflow-y-auto">
           <Suspense>
             <NotesGrid onSelectNote={setSelectedNoteId} />
           </Suspense>
@@ -49,7 +60,7 @@ export default function NotesPage() {
 
       <NoteEditor
         noteId={selectedNoteId}
-        onClose={() => setSelectedNoteId(null)}
+        onClose={handleEditorClose}
       />
     </div>
   );

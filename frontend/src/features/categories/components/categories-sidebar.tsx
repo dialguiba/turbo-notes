@@ -113,8 +113,13 @@ export function CategoriesSidebar() {
             onClick={() => setCategory(null)}
             className="hover:bg-accent flex w-full cursor-pointer items-center gap-3 rounded-md px-3 py-2 text-sm"
           >
-            <span className={activeCategoryId === null ? "font-bold" : ""}>
+            <span
+              className={`flex-1 text-left ${activeCategoryId === null ? "font-bold" : ""}`}
+            >
               All Categories
+            </span>
+            <span className="text-muted-foreground shrink-0 text-xs">
+              {categories?.reduce((sum, cat) => sum + cat.note_count, 0) ?? 0}
             </span>
           </button>
           {categories?.map((cat) => (
