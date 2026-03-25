@@ -1,6 +1,6 @@
 # Turbo Notes
 
-A note-taking application with categories, auto-save, color-coded organization, and smart date formatting. Built as a technical assessment for [Turbo AI](https://turbo.ai).
+A note-taking application with categories, auto-save, color-coded organization, and smart date formatting. Built as a technical assessment for Turbo AI.
 
 ## Tech Stack
 
