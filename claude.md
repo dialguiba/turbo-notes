@@ -1,7 +1,7 @@
 # Project Overview
 
 Note-taking app with categories, auto-save, and voice-to-text.
-Backend: Django + DRF (scaffolded). Frontend: Next.js 16 + shadcn/ui (to be built).
+Backend: Django + DRF. Frontend: Next.js 16 + shadcn/ui.
 
 ## Before any task
 
@@ -11,7 +11,7 @@ Backend: Django + DRF (scaffolded). Frontend: Next.js 16 + shadcn/ui (to be buil
 
 # Tech Stack
 
-## Backend (already scaffolded)
+## Backend
 
 - Framework: Django 6.0 + Django REST Framework
 - Auth: JWT via djangorestframework-simplejwt
@@ -21,17 +21,17 @@ Backend: Django + DRF (scaffolded). Frontend: Next.js 16 + shadcn/ui (to be buil
 - Linting: ruff
 - Testing: pytest + Django Test Client
 
-## Frontend (to be built)
+## Frontend
 
 - Runtime: Node.js 24 LTS (see `frontend/.nvmrc`) · pnpm · localhost:3000
 - Framework: Next.js 16.x (App Router) + React + TypeScript strict
-- UI Library: shadcn/ui (New York style)
+- UI Library: shadcn/ui (base-nova style)
 - Styling: Tailwind CSS v4 (CSS-based config in `globals.css`)
 - Server state: TanStack Query
 - Icons: lucide-react
 - Dates: date-fns
 - Linting: ESLint + Prettier (with prettier-plugin-tailwindcss)
-- Testing: Playwright (E2E) · Vitest (optional unit)
+- Testing: Vitest (unit)
 
 # Commands
 
@@ -67,7 +67,8 @@ pnpm test:watch                     # Vitest watch mode
 
 # Architecture Decisions
 
-- Monolito modular con Django REST Framework, organizado por apps de dominio (`notes`, `users`) con API REST stateless y autenticación JWT
+- Modular monolith with Django REST Framework, organized by domain apps (`notes`, `users`) with stateless REST API and JWT auth
+- Settings split: `config/settings/base.py` (shared), `local.py` (dev), `production.py` (hardened). `__init__.py` imports local by default — set `DJANGO_SETTINGS_MODULE=config.settings.production` in prod
 - API calls go through `frontend/src/lib/api-client.ts` — never `fetch()` directly in components
 - Custom colors (categories, auth bg) defined via `@theme` in `globals.css`
 - Use shadcn tokens for UI chrome, custom tokens for business colors
@@ -78,13 +79,15 @@ pnpm test:watch                     # Vitest watch mode
 
 # Project Structure
 
-- `backend/apps/users/` — user model and auth
-- `backend/apps/notes/` — notes and categories
+- `backend/apps/users/` — user model, auth endpoints, services
+- `backend/apps/notes/` — notes, categories, signals
+- `backend/config/settings/` — split settings (base, local, production)
 - `frontend/src/features/{auth,notes,categories}/` — feature modules with `components/`, `hooks/`, `types.ts`
-- `frontend/src/components/ui/` — shadcn components
-- `frontend/src/lib/` — api-client, utils, mock-data
+- `frontend/src/components/ui/` — shadcn primitives
+- `frontend/src/components/core/` — shared composed components (password-input)
+- `frontend/src/lib/` — api-client, auth-constants, utils
 - `docs/product-specs.md` — source of truth for requirements
-- `docs/ubiquitous-language.md` — domain glossary
+- `docs/ubiquitous-language.md` — domain glossary (if it exists)
 - `docs/features/` — PRDs and tasks per feature
 
 # Data Model
@@ -111,13 +114,11 @@ See source of truth: `backend/config/urls.py`, `backend/apps/users/views.py`, `b
 - Test ownership: a user should never access another user's data
 - Test the unhappy path: wrong credentials, missing fields, invalid data
 
-## Frontend (Playwright) — E2E
+## Frontend (Vitest) — Unit Tests
 
-- End-to-end tests that validate full user flows against acceptance criteria
-
-## Frontend (Vitest) — Selective Unit Tests (Optional)
-
-- Test pure logic only: date formatting, auto-save debounce, category filtering
+- Test pure logic: date formatting, auto-save debounce, category filtering
+- Test hooks: speech recognition, waveform, create note
+- Test components: login/signup forms, voice button, categories sidebar
 - No visual/snapshot tests
 
 # Conventions
@@ -127,6 +128,6 @@ See source of truth: `backend/config/urls.py`, `backend/apps/users/views.py`, `b
 - Keep views thin — business logic goes in models or services
 - Follow existing PK style in the codebase (don't mix UUID and Int)
 - Components in `features/*/components/`, colocated with their types
-- Hooks in `features/*/hooks/`, one file per domain (useNotes, useCategories)
+- Hooks in `features/*/hooks/`, one file per concern (useNotes, useCreateNote, useAutoSave, etc.)
 - Never use `bg-white` or `text-black` directly — use shadcn tokens
 - Import with `@/*` alias (resolves to `src/*`)
