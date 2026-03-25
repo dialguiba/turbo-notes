@@ -16,7 +16,7 @@ function Input({ className, type, ...props }: React.ComponentProps<"input">) {
         // Autofill reset — delay browser's forced background so it never visually appears. Trick to be consistent with the background color since browsers often ignore custom styles for autofill.
         "autofill:[-webkit-text-fill-color:inherit] autofill:[transition:background-color_9999s_ease-in-out_0s] autofill:[-webkit-background-clip:text] autofill:[box-shadow:none]",
         // Placeholder
-        "placeholder:text-black",
+        "placeholder:text-muted-foreground",
         // Focus
         "focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-3",
         // Disabled

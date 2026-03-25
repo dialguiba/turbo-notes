@@ -18,6 +18,9 @@
   --color-category-school: #fff3bf;
   --color-category-personal: #b2f2e5;
 
+  /* Fallback for notes/categories without a color */
+  --color-category-none: #D1D5DB;
+
   /* Additional palette */
   --color-coral: #ffb3b3;
   --color-lavender: #d4b2ff;

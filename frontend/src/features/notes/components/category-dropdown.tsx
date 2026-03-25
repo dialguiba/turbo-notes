@@ -40,7 +40,7 @@ export function CategoryDropdown({ current, onSelect }: CategoryDropdownProps) {
               aria-hidden="true"
               className="size-3 shrink-0 rounded-full"
               style={{
-                backgroundColor: current?.color ?? "#D1D5DB",
+                backgroundColor: current?.color ?? "var(--color-category-none)",
               }}
             />
             {current?.name ?? "No Category"}
@@ -63,7 +63,7 @@ export function CategoryDropdown({ current, onSelect }: CategoryDropdownProps) {
                   <span
                     aria-hidden="true"
                     className="size-3 shrink-0 rounded-full"
-                    style={{ backgroundColor: "#D1D5DB" }}
+                    style={{ backgroundColor: "var(--color-category-none)" }}
                   />
                   No Category
                 </CommandItem>

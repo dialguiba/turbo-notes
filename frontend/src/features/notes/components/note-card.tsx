@@ -31,7 +31,7 @@ export function NoteCard({ note, onSelect }: NoteCardProps) {
     >
       <CardHeader className="gap-0.5">
         <div className="flex items-center gap-2 text-xs">
-          <span className="font-bold text-black">
+          <span className="font-bold text-foreground">
             {formatNoteDate(note.updated_at)}
           </span>
           {note.category && <span>{note.category.name}</span>}

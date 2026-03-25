@@ -116,7 +116,7 @@ export function VoiceButton({
         <Waveform analyserNode={waveform.analyserNode} />
 
         {/* Language badge */}
-        <span className="rounded bg-white/20 px-1.5 py-0.5 text-[10px] font-semibold tracking-wide">
+        <span className="rounded bg-background/20 px-1.5 py-0.5 text-[10px] font-semibold tracking-wide">
           {getLanguageBadge()}
         </span>
 
@@ -142,7 +142,7 @@ export function VoiceButton({
     <Button
       variant={null}
       size="icon"
-      className="absolute right-4 bottom-4 size-10 rounded-full bg-black text-white shadow-lg hover:bg-black/80"
+      className="absolute right-4 bottom-4 size-10 rounded-full bg-foreground text-background shadow-lg hover:bg-foreground/80"
       onClick={handleStart}
       aria-label="Voice to text"
     >
