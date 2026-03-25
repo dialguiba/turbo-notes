@@ -1,3 +1,5 @@
+import { AuthPageTransition } from "./auth-page-transition";
+
 export default function AuthLayout({
   children,
 }: {
@@ -5,7 +7,7 @@ export default function AuthLayout({
 }) {
   return (
     <div className="bg-beige flex flex-1 items-center justify-center px-4 py-8">
-      {children}
+      <AuthPageTransition>{children}</AuthPageTransition>
     </div>
   );
 }
