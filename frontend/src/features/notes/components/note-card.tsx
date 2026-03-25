@@ -12,7 +12,9 @@ interface NoteCardProps {
 export function NoteCard({ note, onSelect }: NoteCardProps) {
   return (
     <Card
-      className="flex h-52 cursor-pointer flex-col overflow-hidden ring-0 transition-shadow hover:shadow-md"
+      role="button"
+      tabIndex={0}
+      className="flex h-52 cursor-pointer flex-col overflow-hidden ring-0 transition-shadow hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
       style={{
         backgroundColor: note.category?.color ?? undefined,
         border: note.category?.color
@@ -20,6 +22,12 @@ export function NoteCard({ note, onSelect }: NoteCardProps) {
           : undefined,
       }}
       onClick={() => onSelect(note.id)}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          onSelect(note.id);
+        }
+      }}
     >
       <CardHeader className="gap-0.5">
         <div className="flex items-center gap-2 text-xs">
