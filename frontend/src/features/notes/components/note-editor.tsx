@@ -119,7 +119,12 @@ function EditorContent({ note, onClose }: { note: Note; onClose: () => void }) {
   }
 
   return (
-    <div className="flex flex-1 flex-col gap-6 px-8 py-8">
+    <div className="relative flex flex-1 flex-col gap-6 px-8 py-8">
+      {/* Local overlay — AlertDialog backdrop can't dim an opaque parent Dialog */}
+      {deleteOpen && (
+        <div className="absolute inset-0 z-10 rounded-none bg-black/40 backdrop-blur-sm" />
+      )}
+
       {/* Top bar */}
       <div className="flex items-center justify-between">
         <CategoryDropdown current={category} onSelect={handleCategoryChange} />
