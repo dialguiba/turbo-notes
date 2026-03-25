@@ -49,7 +49,7 @@ class CategorySerializer(serializers.ModelSerializer):
 
 class NoteSerializer(serializers.ModelSerializer):
     category = serializers.PrimaryKeyRelatedField(
-        queryset=Category.objects.all(),
+        queryset=Category.objects.none(),
         required=False,
         allow_null=True,
     )
@@ -59,10 +59,13 @@ class NoteSerializer(serializers.ModelSerializer):
         fields = ["id", "title", "content", "category", "created_at", "updated_at"]
         read_only_fields = ["id", "created_at", "updated_at"]
 
-    def validate_category(self, value):
-        if value and value.user != self.context["request"].user:
-            raise serializers.ValidationError("Category does not belong to you.")
-        return value
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        request = self.context.get("request")
+        if request and request.user.is_authenticated:
+            self.fields["category"].queryset = Category.objects.filter(
+                user=request.user
+            )
 
     def validate_content(self, value):
         if len(value) > 300_000:
